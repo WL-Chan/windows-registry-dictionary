@@ -2,6 +2,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 [![Docs](https://img.shields.io/badge/docs-schema.md-lightgrey.svg)](./docs/schema.md)
 [![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](./docs/contribution_guide.md)
+[![Overview](https://img.shields.io/badge/docs-project_overview.md-bluegrey.svg)](./docs/project_overview.md)
 
 
 # Windows Registry Dictionary
