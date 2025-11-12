@@ -151,7 +151,3 @@ If unsure about a registry key or value, open an Issue before submitting a Pull 
 This project uses the MIT License.
 All contributions are considered open-source and may be modified or redistributed under the same license.
 
----
-
-## End of Contribution Guide
-
