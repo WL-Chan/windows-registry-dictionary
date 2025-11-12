@@ -5,5 +5,19 @@
   "User Interface": "Visual and personalization settings for Windows.",
   "System Core": "Low-level system settings, services, and drivers.",
   "Updates": "Windows Update and patching related settings.",
-  "Performance": "Settings that affect system responsiveness and performance."
+  "Performance": "Settings that affect system responsiveness and performance.",
+  "Power": "Controls power management, sleep, hibernate, and related options.",
+  "Explorer": "Settings for Windows Explorer, file visibility, and folder behavior.",
+  "Accessibility": "Ease of Access and input-related configurations.",
+  "Privacy": "Telemetry, data collection, and app permission settings.",
+  "Compatibility": "Legacy application support and compatibility mode behaviors.",
+  "Input": "Keyboard, mouse, touchpad, and input behavior settings.",
+  "Services": "Configurations related to Windows and third-party service behaviors.",
+  "Audio": "System sound settings and audio device behaviors.",
+  "Time": "Regional, time zone, and clock synchronization settings.",
+  "Printing": "Printer spooler, driver, and queue management keys.",
+  "Display": "Monitor, screen resolution, and scaling configuration keys.",
+  "Storage": "Disk, volume, and filesystem-level configuration keys.",
+  "Applications": "App registration, default programs, and installed software behaviors.",
+  "Misc": "Miscellaneous registry entries that do not fit other categories."
 }
