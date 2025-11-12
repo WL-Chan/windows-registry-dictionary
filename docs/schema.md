@@ -45,8 +45,31 @@ Each path may contain one or more registry values, with associated metadata.
 ```
 
 ### 4. Field Descriptions
-Field	Type	Description	Required
-description	string	Human-readable explanation of the key or value.	Yes
-type	string	Registry data type (e.g., DWORD, REG_SZ, REG_BINARY, complex).	Yes
-values	object	Optional mapping of registry data values to readable states. Used for enumeration-type settings.	No
-category	string	Logical category (must match one defined in categories.json).	Yes
+| Field           | Type   | Description                                                                                      | Required |
+| --------------- | ------ | ------------------------------------------------------------------------------------------------ | -------- |
+| **description** | string | Human-readable explanation of the key or value.                                                  | Yes      |
+| **type**        | string | Registry data type (e.g., `DWORD`, `REG_SZ`, `REG_BINARY`, `complex`).                           | Yes      |
+| **values**      | object | Optional mapping of registry data values to readable states. Used for enumeration-type settings. | No       |
+| **category**    | string | Logical category (must match one defined in `categories.json`).                                  | Yes      |
+
+### 5. Wildcard Rules
+Some keys represent multiple subkeys or values.
+To support this, wildcards are used.
+| Wildcard | Meaning                                                                |
+| -------- | ---------------------------------------------------------------------- |
+| `*`      | Matches any subkey or value under the specified path.                  |
+| `{any}`  | Placeholder for variable subkey names (optional alternative notation). |
+
+Example:
+```
+"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services": {
+  "*": {
+    "description": "Each subkey represents a system service or driver.",
+    "type": "complex",
+    "values": {},
+    "category": "System Core"
+  }
+}
+```
+
+
