@@ -6,13 +6,14 @@ $DictionaryUrl = "https://raw.githubusercontent.com/WL-Chan/windows-registry-dic
 function Load-Dictionary {
     try { Invoke-RestMethod -Uri $DictionaryUrl -UseBasicParsing } 
     catch {
-        [System.Windows.Forms.MessageBox]::Show("Failed to load dictionary from GitHub.","Error","OK","Error")
-        exit
+        [System.Windows.Forms.MessageBox]::Show("Failed to load dictionary from GitHub.`n$($_.Exception.Message)","Error")
+        return $null
     }
 }
 
 function Get-EntryInfo {
     param($dict, $path, $name)
+    if ($null -eq $dict) { return $null }
     if ($dict.ContainsKey($path)) {
         $keys = $dict[$path].PSObject.Properties.Name
         if ($keys -contains $name) { return $dict[$path].$name }
@@ -36,7 +37,7 @@ function Convert-PathToFull {
     return $prov
 }
 
-# -------- UI SETUP --------
+# -------- UI ----------
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Registry Dictionary Scanner"
 $form.Width = 1000
@@ -108,14 +109,70 @@ $form.Controls.Add($lblSummary)
 
 $btnSave.Enabled = $false
 
-# -------- RUNSPACE BACKGROUND SCAN --------
+# Preload dictionary on main thread
+$labelStatus.Text = "Loading dictionary..."
+$form.Refresh()
+$global:RegistryDict = Load-Dictionary
+if ($null -eq $global:RegistryDict) {
+    $labelStatus.Text = "Failed to load dictionary."
+} else {
+    $labelStatus.Text = "Dictionary loaded. Ready."
+}
+
+# Concurrent queue for inter-thread messages
+$queueType = [type]::GetType("System.Collections.Concurrent.ConcurrentQueue`1[[System.Object]]")
+$queue = $queueType::new()
+
+# Timer to poll queue and update UI
+$timer = New-Object System.Windows.Forms.Timer
+$timer.Interval = 200
+
+$timer.Add_Tick({
+    while ($queue.TryDequeue([ref]$msg)) {
+        if ($null -eq $msg) { continue }
+        switch ($msg.Type) {
+            "Progress" {
+                $progressBar.Value = [math]::Max(0, [math]::Min(100, [int]$msg.Percent))
+                $labelStatus.Text = $msg.Message
+            }
+            "Partial" {
+                # partial text chunk to append (avoid huge single writes)
+                if ($msg.Target -eq "Known") { $txtKnown.AppendText($msg.Text + "`r`n") }
+                elseif ($msg.Target -eq "Unknown") { $txtUnknown.AppendText($msg.Text + "`r`n") }
+            }
+            "Complete" {
+                $txtKnown.Lines = $msg.KnownLines
+                $txtUnknown.Lines = $msg.UnknownLines
+                $lblSummary.Text = "Known: $($msg.KnownCount)    Unknown: $($msg.UnknownCount)"
+                $labelStatus.Text = "Scan complete."
+                $btnSave.Enabled = $true
+                $btnStart.Enabled = $true
+                $progressBar.Value = 100
+            }
+            "Error" {
+                $labelStatus.Text = "Error: " + $msg.Message
+                $btnStart.Enabled = $true
+            }
+        }
+    }
+})
+
+# Start scan button -> create runspace and begin scanning
 $btnStart.Add_Click({
+    if ($null -eq $global:RegistryDict) {
+        [System.Windows.Forms.MessageBox]::Show("Dictionary not loaded. Cannot scan.","Error")
+        return
+    }
+
     $btnStart.Enabled = $false
     $btnSave.Enabled = $false
     $txtKnown.Clear()
     $txtUnknown.Clear()
+    $lblSummary.Text = ""
     $progressBar.Value = 0
-    $labelStatus.Text = "Loading dictionary..."
+    $labelStatus.Text = "Starting scan..."
+    $form.Refresh()
+    $timer.Start()
 
     $ps = [powershell]::Create()
     $ps.Runspace = [runspacefactory]::CreateRunspace()
@@ -123,68 +180,82 @@ $btnStart.Add_Click({
     $ps.Runspace.ThreadOptions = "ReuseThread"
     $ps.Runspace.Open()
 
+    $ps.AddArgument($queue)
+    $ps.AddArgument($global:RegistryDict)
+
     $ps.AddScript({
-        $dict = Load-Dictionary
-        $known = [System.Collections.ArrayList]@()
-        $unknown = [System.Collections.ArrayList]@()
-
-        $scanRoots = @("HKLM:\SOFTWARE", "HKCU:\SOFTWARE")
-        $allKeys = @()
-        foreach ($root in $scanRoots) {
-            try { $allKeys += Get-ChildItem -Path $root -Recurse -ErrorAction SilentlyContinue }
-            catch {}
-        }
-        $total = $allKeys.Count
-        if ($total -eq 0) { $total = 1 }
-        $i = 0
-
-        foreach ($key in $allKeys) {
-            $i++
-            $percent = [math]::Min(100, [math]::Round(($i / $total) * 100))
-            try {
-                $form.Invoke({
-                    $progressBar.Value = $args[0]
-                    $labelStatus.Text = "Scanning $($args[1]) / $($args[2])..."
-                }, @($percent, $i, $total))
-            } catch {}
-
-            try {
-                $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
-                $valueNames = $values.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS(A|P|C)' } | ForEach-Object { $_.Name }
-                foreach ($vName in $valueNames) {
-                    $fullPath = Convert-PathToFull $key.PSPath
-                    $entry = Get-EntryInfo -dict $dict -path $fullPath -name $vName
-                    if ($entry) {
-                        [void]$known.Add([PSCustomObject]@{
-                            Path = "$fullPath\$vName"
-                            Desc = $entry.description
-                            Cat  = $entry.category
-                        })
-                    } else {
-                        [void]$unknown.Add([PSCustomObject]@{
-                            Path = "$fullPath\$vName"
-                        })
-                    }
-                }
-            } catch {}
-        }
-
+        param($queue, $dict)
         try {
-            $form.Invoke({
-                $txtKnown.Lines = $args[0] | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
-                $txtUnknown.Lines = $args[1] | ForEach-Object { $_.Path }
-                $lblSummary.Text = "Known: $($args[0].Count)    Unknown: $($args[1].Count)"
-                $labelStatus.Text = "Scan complete."
-                $btnSave.Enabled = $true
-                $btnStart.Enabled = $true
-            }, @($known, $unknown))
-        } catch {}
+            $scanRoots = @("HKLM:\SOFTWARE", "HKCU:\SOFTWARE")
+            $allKeys = @()
+            foreach ($root in $scanRoots) {
+                try { $allKeys += Get-ChildItem -Path $root -Recurse -ErrorAction SilentlyContinue }
+                catch {}
+            }
+            $total = $allKeys.Count
+            if ($total -eq 0) { $total = 1 }
+            $i = 0
+            $known = New-Object System.Collections.ArrayList
+            $unknown = New-Object System.Collections.ArrayList
+
+            foreach ($key in $allKeys) {
+                $i++
+                $percent = [math]::Round(($i / $total) * 100)
+                $msg = @{ Type="Progress"; Percent=$percent; Message="Scanning $i / $total" }
+                $queue.Enqueue($msg)
+
+                try {
+                    $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
+                    $valueNames = $values.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS(A|P|C)' } | ForEach-Object { $_.Name }
+                    foreach ($vName in $valueNames) {
+                        $fullPath = Convert-PathToFull $key.PSPath
+                        $entry = $null
+                        if ($null -ne $dict) {
+                            if ($dict.ContainsKey($fullPath)) {
+                                $keys = $dict[$fullPath].PSObject.Properties.Name
+                                if ($keys -contains $vName) { $entry = $dict[$fullPath].$vName }
+                                elseif ($keys -contains "*") { $entry = $dict[$fullPath]."*" }
+                            }
+                        }
+                        if ($entry) {
+                            $obj = [PSCustomObject]@{ Path = "$fullPath\$vName"; Desc = $entry.description; Cat = $entry.category }
+                            [void]$known.Add($obj)
+                        } else {
+                            $obj = [PSCustomObject]@{ Path = "$fullPath\$vName" }
+                            [void]$unknown.Add($obj)
+                        }
+                    }
+                } catch {}
+                # reduce UI flooding: send partial lines every 200 items
+                if (($i % 200) -eq 0) {
+                    # send small sample partial lines (not required, main final will set all)
+                    $queue.Enqueue(@{ Type="Partial"; Target="Known"; Text="Scanned $i of $total..." })
+                }
+            }
+
+            # prepare final arrays for UI
+            $knownSorted = $known | Sort-Object Path
+            $unknownSorted = $unknown | Sort-Object Path
+            $knownLines = $knownSorted | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
+            $unknownLines = $unknownSorted | ForEach-Object { $_.Path }
+
+            $completeMsg = @{
+                Type = "Complete"
+                KnownLines = $knownLines
+                UnknownLines = $unknownLines
+                KnownCount = $knownSorted.Count
+                UnknownCount = $unknownSorted.Count
+            }
+            $queue.Enqueue($completeMsg)
+        } catch {
+            $queue.Enqueue(@{ Type="Error"; Message = $_.Exception.Message })
+        }
     })
 
-    $null = $ps.BeginInvoke()
+    $ps.BeginInvoke() | Out-Null
 })
 
-# ---- Save Report ----
+# Save Report
 $btnSave.Add_Click({
     $dialog = New-Object System.Windows.Forms.SaveFileDialog
     $dialog.Filter = "JSON Files (*.json)|*.json"
@@ -194,7 +265,11 @@ $btnSave.Add_Click({
         $output = @{
             Known = $txtKnown.Lines
             Unknown = $txtUnknown.Lines
-            Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+            Summary = @{
+                KnownCount = $txtKnown.Lines.Count
+                UnknownCount = $txtUnknown.Lines.Count
+                Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+            }
         }
         $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
         [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
@@ -202,3 +277,4 @@ $btnSave.Add_Click({
 })
 
 [void]$form.ShowDialog()
+#
