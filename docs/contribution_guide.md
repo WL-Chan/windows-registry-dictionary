@@ -117,3 +117,41 @@ Recommended ways to verify your JSON:
   "note": "Behavior observed in Windows 11 build 22621; requires confirmation."
   ```
 - Keep all explanations concise (under 3 sentences preferred).
+
+---
+
+## 10. Example of a Complete Category Entry
+```json
+"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters": {
+  "EnableDeadGWDetect": {
+    "description": "Determines whether Windows detects and switches to an alternate gateway when the current one is unreachable.",
+    "type": "DWORD",
+    "values": {
+      "0": "Disabled",
+      "1": "Enabled"
+    },
+    "category": "Network"
+  }
+}
+```
+
+---
+
+## 11. Communication and Review
+
+All submissions are subject to review for accuracy and consistency.
+Discussions, clarifications, and suggestions should be opened using GitHub Issues or Pull Request comments.
+
+If unsure about a registry key or value, open an Issue before submitting a Pull Request.
+
+---
+
+## 12. License and Attribution
+
+This project uses the MIT License.
+All contributions are considered open-source and may be modified or redistributed under the same license.
+
+---
+
+## End of Contribution Guide
+
