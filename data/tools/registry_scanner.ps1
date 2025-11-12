@@ -47,7 +47,7 @@ $form.BackColor = [System.Drawing.Color]::FromArgb(30,30,30)
 $font = New-Object System.Drawing.Font("Consolas",10)
 
 $labelStatus = New-Object System.Windows.Forms.Label
-$labelStatus.Text = "Ready"
+$labelStatus.Text = "Idle"
 $labelStatus.ForeColor = "White"
 $labelStatus.Font = $font
 $labelStatus.Location = New-Object System.Drawing.Point(20,20)
@@ -59,9 +59,17 @@ $progressBar.Location = New-Object System.Drawing.Point(20,50)
 $progressBar.Size = New-Object System.Drawing.Size(940,20)
 $form.Controls.Add($progressBar)
 
+$btnStart = New-Object System.Windows.Forms.Button
+$btnStart.Text = "Start Scan"
+$btnStart.Location = New-Object System.Drawing.Point(20,80)
+$btnStart.Width = 120
+$btnStart.BackColor = [System.Drawing.Color]::FromArgb(60,180,75)
+$btnStart.ForeColor = "White"
+$form.Controls.Add($btnStart)
+
 $btnSave = New-Object System.Windows.Forms.Button
 $btnSave.Text = "Save Report"
-$btnSave.Location = New-Object System.Drawing.Point(20,80)
+$btnSave.Location = New-Object System.Drawing.Point(160,80)
 $btnSave.Width = 120
 $btnSave.BackColor = [System.Drawing.Color]::FromArgb(0,120,215)
 $btnSave.ForeColor = "White"
@@ -101,7 +109,14 @@ $form.Controls.Add($lblSummary)
 $btnSave.Enabled = $false
 
 # -------- RUNSPACE BACKGROUND SCAN --------
-$form.Add_Shown({
+$btnStart.Add_Click({
+    $btnStart.Enabled = $false
+    $btnSave.Enabled = $false
+    $txtKnown.Clear()
+    $txtUnknown.Clear()
+    $progressBar.Value = 0
+    $labelStatus.Text = "Loading dictionary..."
+
     $ps = [powershell]::Create()
     $ps.Runspace = [runspacefactory]::CreateRunspace()
     $ps.Runspace.ApartmentState = "STA"
@@ -161,6 +176,7 @@ $form.Add_Shown({
                 $lblSummary.Text = "Known: $($args[0].Count)    Unknown: $($args[1].Count)"
                 $labelStatus.Text = "Scan complete."
                 $btnSave.Enabled = $true
+                $btnStart.Enabled = $true
             }, @($known, $unknown))
         } catch {}
     })
@@ -186,4 +202,3 @@ $btnSave.Add_Click({
 })
 
 [void]$form.ShowDialog()
-#
