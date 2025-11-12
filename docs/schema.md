@@ -66,7 +66,7 @@ To support this, wildcards are used.
 | `{any}`  | Placeholder for variable subkey names (optional alternative notation). |
 
 Example:
-```
+```json
 "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services": {
   "*": {
     "description": "Each subkey represents a system service or driver.",
@@ -99,7 +99,7 @@ Categories provide organization for registry entries.
 All entries must reference one of the valid categories listed in categories.json.
 
 Example:
-```
+```json
 {
   "Security": "Keys that affect Windows security, permissions, and access control.",
   "Startup": "Programs and services that start with Windows."
@@ -113,7 +113,7 @@ Example:
 The file version.json tracks the current public version of the dictionary.
 
 Example:
-```
+```json
 {
   "version": "0.1"
 }
@@ -154,6 +154,4 @@ Before committing changes:
 
 ---
 
-Once this file is committed, your `docs/` folder will look official and set the tone for future contributors.  
-Would you like the next step to be creating `docs/contribution_guide.md` (so others know how to add new registry entries safely)?
 
