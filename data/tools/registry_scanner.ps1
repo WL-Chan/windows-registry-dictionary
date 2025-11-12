@@ -27,7 +27,7 @@
 #>
 
 param (
-    [string]$DictionaryUrl = "https://raw.githubusercontent.com/<yourusername>/windows-registry-dictionary/main/data/registry_dictionary.json",
+    [string]$DictionaryUrl = "https://raw.githubusercontent.com/WL-Chan/windows-registry-dictionary/main/data/registry_dictionary.json",
     [string[]]$ScanPaths = @(
         "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System",
         "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run",
