@@ -196,6 +196,3 @@ Write-Host "Latest Dictionary Version: $remoteVersion"
 Usage of this dictionary is covered under the MIT License.
 You may freely use, integrate, and distribute it in your own tools or products, provided attribution remains intact.
 
----
-
-End of API Usage Guide
