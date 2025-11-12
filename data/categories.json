@@ -1,0 +1,9 @@
+{
+  "Security": "Keys that affect Windows security, permissions, and access control.",
+  "Startup": "Programs and services that start with Windows.",
+  "Network": "Settings related to network configuration and behavior.",
+  "User Interface": "Visual and personalization settings for Windows.",
+  "System Core": "Low-level system settings, services, and drivers.",
+  "Updates": "Windows Update and patching related settings.",
+  "Performance": "Settings that affect system responsiveness and performance."
+}
