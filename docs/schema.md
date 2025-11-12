@@ -113,7 +113,7 @@ Example:
 The file version.json tracks the current public version of the dictionary.
 
 Example:
-```
+```json
 {
   "version": "0.1"
 }
