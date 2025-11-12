@@ -47,6 +47,7 @@ Each path may contain one or more registry values, with associated metadata.
 ---
 
 ## 4. Field Descriptions
+
 | Field           | Type   | Description                                                                                      | Required |
 | --------------- | ------ | ------------------------------------------------------------------------------------------------ | -------- |
 | **description** | string | Human-readable explanation of the key or value.                                                  | Yes      |
@@ -79,6 +80,7 @@ Example:
 ---
 
 ## 6. Data Types (type Field)
+
 | Type            | Description                                                          |
 | --------------- | -------------------------------------------------------------------- |
 | `REG_SZ`        | String value.                                                        |
@@ -88,4 +90,70 @@ Example:
 | `REG_MULTI_SZ`  | Multi-string value.                                                  |
 | `REG_EXPAND_SZ` | Expandable string with environment variables.                        |
 | `complex`       | Indicates a container key with multiple sub-values (e.g., Services). |
+
+---
+
+## 7. Categories (category Field)
+
+Categories provide organization for registry entries.
+All entries must reference one of the valid categories listed in categories.json.
+
+Example:
+```
+{
+  "Security": "Keys that affect Windows security, permissions, and access control.",
+  "Startup": "Programs and services that start with Windows."
+}
+```
+
+---
+
+## 8. Versioning
+
+The file version.json tracks the current public version of the dictionary.
+
+Example:
+```
+{
+  "version": "0.1"
+}
+```
+
+Applications or scripts using this repository can periodically check this version number to detect updates.
+
+---
+
+## 9. Contribution Guidelines (summary)
+
+- Each new registry key entry must include description, type, and category.
+- If applicable, include a values object mapping integer or string data to readable descriptions.
+- Avoid including undocumented or potentially unsafe keys without clear explanation.
+- Use double backslashes (\\) in registry paths for JSON validity.
+- Keep all keys alphabetically ordered for easier maintenance.
+
+---
+
+## 10. Future Schema Extensions
+
+- Multi-language support (description_en, description_ms, etc.)
+- Source reference field (source: "Microsoft Docs", "Internal Test", etc.)
+- Tag system for filtering (tags: ["network", "policy", "deprecated"])
+- Validation schema file for automated JSON linting.
+
+---
+
+## 11. Validation
+
+Before committing changes:
+
+1. Validate JSON syntax using any JSON linter.
+2. Confirm all category names exist in categories.json.
+3. Ensure descriptions are concise and neutral.
+4. Avoid including user-specific registry keys or transient entries.
+
+
+---
+
+Once this file is committed, your `docs/` folder will look official and set the tone for future contributors.  
+Would you like the next step to be creating `docs/contribution_guide.md` (so others know how to add new registry entries safely)?
 
