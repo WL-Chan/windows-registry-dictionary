@@ -1,0 +1,48 @@
+{
+  "scan_metadata": {
+    "scan_date": "2025-11-12T12:00:00Z",
+    "scanned_hives": [
+      "HKEY_LOCAL_MACHINE",
+      "HKEY_CURRENT_USER"
+    ],
+    "dictionary_version": "0.1"
+  },
+
+  "results": [
+    {
+      "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\EnableLUA",
+      "raw_value": 0,
+      "interpreted_value": "UAC Disabled",
+      "description": "Controls User Account Control (UAC) prompts. When 0, UAC prompts are disabled; when 1, UAC is enabled.",
+      "category": "Security"
+    },
+    {
+      "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\MyApp",
+      "raw_value": "\"C:\\\\Program Files\\\\MyApp\\\\MyApp.exe\"",
+      "interpreted_value": "Startup program",
+      "description": "Programs listed here are configured to run automatically when Windows starts (system-wide).",
+      "category": "Startup"
+    },
+    {
+      "path": "HKEY_CURRENT_USER\\Control Panel\\Desktop\\Wallpaper",
+      "raw_value": "C:\\\\Users\\\\WLChan\\\\Pictures\\\\wallpaper.jpg",
+      "interpreted_value": "Custom wallpaper set",
+      "description": "Path to the current desktop wallpaper image file.",
+      "category": "User Interface"
+    },
+    {
+      "path": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\WaitToKillServiceTimeout",
+      "raw_value": "5000",
+      "interpreted_value": "Windows waits 5 seconds before forcing service shutdown.",
+      "description": "Time in milliseconds Windows waits for services to stop before forcing termination during shutdown or restart.",
+      "category": "Performance"
+    },
+    {
+      "path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\NoAutoUpdate",
+      "raw_value": 1,
+      "interpreted_value": "Automatic updates disabled",
+      "description": "When set, disables automatic Windows Updates according to policy.",
+      "category": "Updates"
+    }
+  ]
+}
