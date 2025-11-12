@@ -4,9 +4,8 @@ Add-Type -AssemblyName System.Drawing
 $DictionaryUrl = "https://raw.githubusercontent.com/WL-Chan/windows-registry-dictionary/main/data/registry_dictionary.json"
 
 function Load-Dictionary {
-    try {
-        return (Invoke-RestMethod -Uri $DictionaryUrl -UseBasicParsing)
-    } catch {
+    try { Invoke-RestMethod -Uri $DictionaryUrl -UseBasicParsing } 
+    catch {
         [System.Windows.Forms.MessageBox]::Show("Failed to load dictionary from GitHub.","Error","OK","Error")
         exit
     }
@@ -37,7 +36,6 @@ function Convert-PathToFull {
     return $prov
 }
 
-# ---------- UI SETUP ----------
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Registry Dictionary Scanner"
 $form.Width = 1000
@@ -48,7 +46,7 @@ $form.BackColor = [System.Drawing.Color]::FromArgb(30,30,30)
 $font = New-Object System.Drawing.Font("Consolas",10)
 
 $labelStatus = New-Object System.Windows.Forms.Label
-$labelStatus.Text = "Ready to scan."
+$labelStatus.Text = "Ready"
 $labelStatus.ForeColor = "White"
 $labelStatus.Font = $font
 $labelStatus.Location = New-Object System.Drawing.Point(20,20)
@@ -63,12 +61,11 @@ $form.Controls.Add($progressBar)
 $btnSave = New-Object System.Windows.Forms.Button
 $btnSave.Text = "Save Report"
 $btnSave.Location = New-Object System.Drawing.Point(20,80)
+$btnSave.Width = 120
 $btnSave.BackColor = [System.Drawing.Color]::FromArgb(0,120,215)
 $btnSave.ForeColor = "White"
-$btnSave.FlatStyle = "Flat"
 $form.Controls.Add($btnSave)
 
-# Panels
 $txtKnown = New-Object System.Windows.Forms.TextBox
 $txtKnown.Multiline = $true
 $txtKnown.ScrollBars = "Vertical"
@@ -100,30 +97,28 @@ $lblSummary.Location = New-Object System.Drawing.Point(20,620)
 $lblSummary.AutoSize = $true
 $form.Controls.Add($lblSummary)
 
-# ---------- SCAN ----------
-$form.Add_Shown({
-    $labelStatus.Text = "Loading dictionary..."
-    $dict = Load-Dictionary
-    $known = New-Object System.Collections.Generic.List[Object]
-    $unknown = New-Object System.Collections.Generic.List[Object]
+$btnSave.Enabled = $false
 
+$worker = New-Object System.ComponentModel.BackgroundWorker
+$worker.WorkerReportsProgress = $true
+
+$worker.DoWork += {
+    $dict = Load-Dictionary
+    $known = [System.Collections.ArrayList]@()
+    $unknown = [System.Collections.ArrayList]@()
     $scanRoots = @("HKLM:\SOFTWARE", "HKCU:\SOFTWARE")
     $allKeys = @()
     foreach ($root in $scanRoots) {
         try { $allKeys += Get-ChildItem -Path $root -Recurse -ErrorAction SilentlyContinue }
         catch {}
     }
-
     $total = $allKeys.Count
     $i = 0
 
     foreach ($key in $allKeys) {
         $i++
         $percent = [math]::Round(($i / $total) * 100)
-        $progressBar.Value = $percent
-        $labelStatus.Text = "Scanning $i / $total ..."
-        $form.Refresh()
-
+        $worker.ReportProgress($percent, "Scanning $i / $total...")
         try {
             $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
             $valueNames = $values.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS(A|P|C)' } | ForEach-Object { $_.Name }
@@ -132,50 +127,59 @@ $form.Add_Shown({
                 $fullPath = Convert-PathToFull $key.PSPath
                 $entry = Get-EntryInfo -dict $dict -path $fullPath -name $vName
                 if ($entry) {
-                    $known.Add([PSCustomObject]@{
+                    [void]$known.Add([PSCustomObject]@{
                         Path = "$fullPath\$vName"
                         Desc = $entry.description
                         Cat  = $entry.category
                     })
                 } else {
-                    $unknown.Add([PSCustomObject]@{
+                    [void]$unknown.Add([PSCustomObject]@{
                         Path = "$fullPath\$vName"
                     })
                 }
             }
         } catch {}
     }
-
-    $known = $known | Sort-Object Path
-    $unknown = $unknown | Sort-Object Path
-
-    foreach ($k in $known) { $txtKnown.AppendText("[$($k.Cat)] $($k.Path)`r`n    $($k.Desc)`r`n`r`n") }
-    foreach ($u in $unknown) { $txtUnknown.AppendText("$($u.Path)`r`n") }
-
-    $lblSummary.Text = "Known: $($known.Count)    Unknown: $($unknown.Count)"
-    $labelStatus.Text = "Scan complete."
-})
-
-# ---------- SAVE ----------
-$btnSave.Add_Click({
-    $dialog = New-Object System.Windows.Forms.SaveFileDialog
-    $dialog.Filter = "JSON Files (*.json)|*.json"
-    $dialog.Title = "Save Registry Scan Report"
-    $dialog.FileName = "registry_scan_report.json"
-
-    if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-        $output = @{
-            Known = $known
-            Unknown = $unknown
-            Summary = @{
-                KnownCount = $known.Count
-                UnknownCount = $unknown.Count
-                Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-            }
-        }
-        $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
-        [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
+    $result = [PSCustomObject]@{
+        Known = $known | Sort-Object Path
+        Unknown = $unknown | Sort-Object Path
     }
-})
+    $worker.Result = $result
+}
 
+$worker.ProgressChanged += {
+    $progressBar.Value = $_.ProgressPercentage
+    $labelStatus.Text = $_.UserState
+}
+
+$worker.RunWorkerCompleted += {
+    $result = $_.Result
+    $txtKnown.Lines = $result.Known | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
+    $txtUnknown.Lines = $result.Unknown | ForEach-Object { $_.Path }
+    $lblSummary.Text = "Known: $($result.Known.Count)    Unknown: $($result.Unknown.Count)"
+    $labelStatus.Text = "Scan complete."
+    $btnSave.Enabled = $true
+
+    $btnSave.Add_Click({
+        $dialog = New-Object System.Windows.Forms.SaveFileDialog
+        $dialog.Filter = "JSON Files (*.json)|*.json"
+        $dialog.Title = "Save Registry Scan Report"
+        $dialog.FileName = "registry_scan_report.json"
+        if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+            $output = @{
+                Known = $result.Known
+                Unknown = $result.Unknown
+                Summary = @{
+                    KnownCount = $result.Known.Count
+                    UnknownCount = $result.Unknown.Count
+                    Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+                }
+            }
+            $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
+            [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
+        }
+    })
+}
+
+$form.Add_Shown({ $worker.RunWorkerAsync() })
 [void]$form.ShowDialog()
