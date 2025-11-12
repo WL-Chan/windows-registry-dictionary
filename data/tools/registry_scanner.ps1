@@ -36,6 +36,7 @@ function Convert-PathToFull {
     return $prov
 }
 
+# --------- UI ---------
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Registry Dictionary Scanner"
 $form.Width = 1000
@@ -99,87 +100,85 @@ $form.Controls.Add($lblSummary)
 
 $btnSave.Enabled = $false
 
-$worker = New-Object System.ComponentModel.BackgroundWorker
-$worker.WorkerReportsProgress = $true
+# --------- THREAD SCAN ---------
+$form.Add_Shown({
+    $thread = [System.Threading.Thread]::new({
+        $dict = Load-Dictionary
+        $known = [System.Collections.ArrayList]@()
+        $unknown = [System.Collections.ArrayList]@()
 
-$worker.DoWork += {
-    $dict = Load-Dictionary
-    $known = [System.Collections.ArrayList]@()
-    $unknown = [System.Collections.ArrayList]@()
-    $scanRoots = @("HKLM:\SOFTWARE", "HKCU:\SOFTWARE")
-    $allKeys = @()
-    foreach ($root in $scanRoots) {
-        try { $allKeys += Get-ChildItem -Path $root -Recurse -ErrorAction SilentlyContinue }
-        catch {}
-    }
-    $total = $allKeys.Count
-    $i = 0
-
-    foreach ($key in $allKeys) {
-        $i++
-        $percent = [math]::Round(($i / $total) * 100)
-        $worker.ReportProgress($percent, "Scanning $i / $total...")
-        try {
-            $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
-            $valueNames = $values.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS(A|P|C)' } | ForEach-Object { $_.Name }
-            foreach ($vName in $valueNames) {
-                $val = $values.$vName
-                $fullPath = Convert-PathToFull $key.PSPath
-                $entry = Get-EntryInfo -dict $dict -path $fullPath -name $vName
-                if ($entry) {
-                    [void]$known.Add([PSCustomObject]@{
-                        Path = "$fullPath\$vName"
-                        Desc = $entry.description
-                        Cat  = $entry.category
-                    })
-                } else {
-                    [void]$unknown.Add([PSCustomObject]@{
-                        Path = "$fullPath\$vName"
-                    })
-                }
-            }
-        } catch {}
-    }
-    $result = [PSCustomObject]@{
-        Known = $known | Sort-Object Path
-        Unknown = $unknown | Sort-Object Path
-    }
-    $worker.Result = $result
-}
-
-$worker.ProgressChanged += {
-    $progressBar.Value = $_.ProgressPercentage
-    $labelStatus.Text = $_.UserState
-}
-
-$worker.RunWorkerCompleted += {
-    $result = $_.Result
-    $txtKnown.Lines = $result.Known | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
-    $txtUnknown.Lines = $result.Unknown | ForEach-Object { $_.Path }
-    $lblSummary.Text = "Known: $($result.Known.Count)    Unknown: $($result.Unknown.Count)"
-    $labelStatus.Text = "Scan complete."
-    $btnSave.Enabled = $true
-
-    $btnSave.Add_Click({
-        $dialog = New-Object System.Windows.Forms.SaveFileDialog
-        $dialog.Filter = "JSON Files (*.json)|*.json"
-        $dialog.Title = "Save Registry Scan Report"
-        $dialog.FileName = "registry_scan_report.json"
-        if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-            $output = @{
-                Known = $result.Known
-                Unknown = $result.Unknown
-                Summary = @{
-                    KnownCount = $result.Known.Count
-                    UnknownCount = $result.Unknown.Count
-                    Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-                }
-            }
-            $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
-            [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
+        $scanRoots = @("HKLM:\SOFTWARE", "HKCU:\SOFTWARE")
+        $allKeys = @()
+        foreach ($root in $scanRoots) {
+            try { $allKeys += Get-ChildItem -Path $root -Recurse -ErrorAction SilentlyContinue }
+            catch {}
         }
-    })
-}
+        $total = $allKeys.Count
+        $i = 0
 
-$form.Add_Shown({ $worker.RunWorkerAsync() })
+        foreach ($key in $allKeys) {
+            $i++
+            $percent = [math]::Round(($i / $total) * 100)
+
+            $form.Invoke({
+                param($p, $msg)
+                $progressBar.Value = $p
+                $labelStatus.Text = $msg
+            }, $percent, "Scanning $i / $total...")
+
+            try {
+                $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
+                $valueNames = $values.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS(A|P|C)' } | ForEach-Object { $_.Name }
+                foreach ($vName in $valueNames) {
+                    $val = $values.$vName
+                    $fullPath = Convert-PathToFull $key.PSPath
+                    $entry = Get-EntryInfo -dict $dict -path $fullPath -name $vName
+                    if ($entry) {
+                        [void]$known.Add([PSCustomObject]@{
+                            Path = "$fullPath\$vName"
+                            Desc = $entry.description
+                            Cat  = $entry.category
+                        })
+                    } else {
+                        [void]$unknown.Add([PSCustomObject]@{
+                            Path = "$fullPath\$vName"
+                        })
+                    }
+                }
+            } catch {}
+        }
+
+        $form.Invoke({
+            param($known,$unknown)
+            $txtKnown.Lines = $known | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
+            $txtUnknown.Lines = $unknown | ForEach-Object { $_.Path }
+            $lblSummary.Text = "Known: $($known.Count)    Unknown: $($unknown.Count)"
+            $labelStatus.Text = "Scan complete."
+            $btnSave.Enabled = $true
+
+            $btnSave.Add_Click({
+                $dialog = New-Object System.Windows.Forms.SaveFileDialog
+                $dialog.Filter = "JSON Files (*.json)|*.json"
+                $dialog.Title = "Save Registry Scan Report"
+                $dialog.FileName = "registry_scan_report.json"
+                if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+                    $output = @{
+                        Known = $known
+                        Unknown = $unknown
+                        Summary = @{
+                            KnownCount = $known.Count
+                            UnknownCount = $unknown.Count
+                            Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+                        }
+                    }
+                    $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
+                    [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
+                }
+            })
+        }, $known, $unknown)
+    })
+    $thread.IsBackground = $true
+    $thread.Start()
+})
+
 [void]$form.ShowDialog()
