@@ -113,14 +113,7 @@
     "WallpaperStyle": {
       "description": "Determines how the desktop wallpaper is displayed (stretched, centered, tiled, etc.).",
       "type": "REG_SZ",
-      "values": {
-        "0": "Centered",
-        "1": "Tiled",
-        "2": "Stretched",
-        "3": "Fit",
-        "4": "Fill",
-        "5": "Span"
-      },
+      "values": { "0": "Centered", "1": "Tiled", "2": "Stretched", "3": "Fit", "4": "Fill", "5": "Span" },
       "category": "User Interface"
     },
     "WindowArrangementActive": {
@@ -330,12 +323,7 @@
     "AllowTelemetry": {
       "description": "Controls diagnostic and usage data level sent to Microsoft.",
       "type": "DWORD",
-      "values": {
-        "0": "Security (Enterprise only)",
-        "1": "Basic",
-        "2": "Enhanced",
-        "3": "Full"
-      },
+      "values": { "0": "Security (Enterprise only)", "1": "Basic", "2": "Enhanced", "3": "Full" },
       "category": "Privacy"
     }
   },
@@ -368,32 +356,19 @@
     "ConsentPromptBehaviorAdmin": {
       "description": "Defines UAC prompt behavior for administrators.",
       "type": "DWORD",
-      "values": {
-        "0": "No prompt (elevate silently)",
-        "1": "Prompt for credentials on secure desktop",
-        "2": "Prompt for consent on secure desktop",
-        "3": "Prompt for credentials",
-        "4": "Prompt for consent",
-        "5": "Prompt for consent for non-Windows binaries"
-      },
+      "values": { "0": "No prompt (elevate silently)", "1": "Prompt for credentials on secure desktop", "2": "Prompt for consent on secure desktop", "3": "Prompt for credentials", "4": "Prompt for consent", "5": "Prompt for consent for non-Windows binaries" },
       "category": "Security"
     },
     "DisableCAD": {
       "description": "Removes the requirement to press Ctrl+Alt+Del before logging on.",
       "type": "DWORD",
-      "values": {
-        "0": "Ctrl+Alt+Del required (default)",
-        "1": "Ctrl+Alt+Del not required"
-      },
+      "values": { "0": "Ctrl+Alt+Del required (default)", "1": "Ctrl+Alt+Del not required" },
       "category": "Security"
     },
     "DontDisplayLastUserName": {
       "description": "Hides the name of the last user who logged on at the logon screen.",
       "type": "DWORD",
-      "values": {
-        "0": "Show last logged-on user name",
-        "1": "Do not display last user name"
-      },
+      "values": { "0": "Show last logged-on user name", "1": "Do not display last user name" },
       "category": "Security"
     },
     "EnableInstallerDetection": {
@@ -433,10 +408,7 @@
     "PromptOnSecureDesktop": {
       "description": "Specifies whether elevation prompts appear on the secure desktop or the user's desktop.",
       "type": "DWORD",
-      "values": {
-        "0": "Prompt on user's desktop",
-        "1": "Prompt on secure desktop (recommended)"
-      },
+      "values": { "0": "Prompt on user's desktop", "1": "Prompt on secure desktop (recommended)" },
       "category": "Security"
     }
   },
@@ -452,6 +424,13 @@
       "description": "Programs listed here run once for all users at the next system startup and are then removed.",
       "type": "REG_SZ",
       "category": "Startup"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall": {
+    "*": {
+      "description": "Lists installed applications and their uninstall information.",
+      "type": "complex",
+      "category": "System Core"
     }
   },
   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug": {
@@ -512,12 +491,7 @@
     "EnablePrefetcher": {
       "description": "Controls prefetching for faster application and system startup.",
       "type": "DWORD",
-      "values": {
-        "0": "Disabled",
-        "1": "Application launch only",
-        "2": "Boot only",
-        "3": "Full (both)"
-      },
+      "values": { "0": "Disabled", "1": "Application launch only", "2": "Boot only", "3": "Full (both)" },
       "category": "Performance"
     }
   },
@@ -580,11 +554,26 @@
       "category": "Startup"
     }
   },
-  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall": {
-    "*": {
-      "description": "Lists installed applications and their uninstall information.",
-      "type": "complex",
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control": {
+    "BootDriverFlags": {
+      "description": "Bitmask flags controlling how boot drivers are loaded during startup.",
+      "type": "DWORD",
       "category": "System Core"
+    },
+    "ServicesPipeTimeout": {
+      "description": "Defines how long the Service Control Manager waits for services to start before timing out (in milliseconds).",
+      "type": "DWORD",
+      "category": "System Core"
+    },
+    "SvcHostSplitThresholdInKB": {
+      "description": "Controls memory thresholds for splitting svchost.exe instances. Higher values combine services to reduce memory use.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "WaitToKillServiceTimeout": {
+      "description": "Time in milliseconds that Windows waits for services to stop before forcing termination during shutdown.",
+      "type": "REG_SZ",
+      "category": "Performance"
     }
   },
   "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
@@ -597,13 +586,35 @@
     "CrashDumpEnabled": {
       "description": "Specifies whether Windows creates a memory dump when the system crashes.",
       "type": "REG_DWORD",
-      "values": {
-        "0": "No dump",
-        "1": "Complete memory dump",
-        "2": "Kernel memory dump",
-        "3": "Small memory dump",
-        "7": "Automatic memory dump"
-      },
+      "values": { "0": "No dump", "1": "Complete memory dump", "2": "Kernel memory dump", "3": "Small memory dump", "7": "Automatic memory dump" },
+      "category": "System Core"
+    },
+    "DumpFile": {
+      "description": "Specifies the path where memory dump files are written. Default is %SystemRoot%\\MEMORY.DMP.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "MinidumpDir": {
+      "description": "Specifies the directory for small memory dump files (minidumps).",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "Overwrite": {
+      "description": "Determines whether existing dump files are overwritten automatically.",
+      "type": "DWORD",
+      "values": { "0": "Do not overwrite", "1": "Overwrite existing dump" },
+      "category": "System Core"
+    },
+    "SendAlert": {
+      "description": "When enabled, sends an administrative alert when a system crash occurs.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    },
+    "LogEvent": {
+      "description": "When enabled, logs crash dump generation events to the system event log.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
       "category": "System Core"
     }
   },
@@ -611,7 +622,7 @@
     "NtfsDisableLastAccessUpdate": {
       "description": "Disables updating the last access timestamp on files and folders.",
       "type": "REG_DWORD",
-      "values": { "0": "Enabled", "1": "Disabled" },
+      "values": { "0": "Enabled (update timestamps)", "1": "Disabled (performance boost)" },
       "category": "Performance"
     },
     "NtfsMemoryUsage": {
@@ -619,6 +630,12 @@
       "type": "REG_DWORD",
       "values": { "1": "Standard", "2": "Increased" },
       "category": "Performance"
+    },
+    "Win31FileSystem": {
+      "description": "Allows legacy 8.3 filename creation for backward compatibility.",
+      "type": "REG_DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Compatibility"
     }
   },
   "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
@@ -632,11 +649,39 @@
       "description": "Number of seconds Windows waits before considering GPU unresponsive.",
       "type": "DWORD",
       "category": "Performance"
+    },
+    "TdrLevel": {
+      "description": "Timeout Detection and Recovery level for the GPU driver.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled (default)" },
+      "category": "Performance"
     }
   },
   "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+    "Attributes": {
+      "description": "Controls the visibility of advanced power settings in the Control Panel.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "CsEnabled": {
+      "description": "Indicates whether the system supports and allows Connected Standby (Modern Standby).",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "HibernateEnabled": {
+      "description": "Determines whether hibernation is enabled on the system.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    },
+    "HiberFileType": {
+      "description": "Specifies the type of hibernation file: full or reduced.",
+      "type": "DWORD",
+      "values": { "0": "Full", "1": "Reduced" },
+      "category": "Performance"
+    },
     "HiberbootEnabled": {
-      "description": "Controls Fast Startup feature (hybrid boot).",
+      "description": "Controls Fast Startup feature. When enabled, Windows uses hybrid boot to resume faster.",
       "type": "DWORD",
       "values": { "0": "Disabled", "1": "Enabled" },
       "category": "Performance"
@@ -647,35 +692,39 @@
       "description": "Lists system commands executed during boot (default includes autochk).",
       "type": "REG_MULTI_SZ",
       "category": "System Core"
+    },
+    "CriticalSectionTimeout": {
+      "description": "Timeout value for critical section deadlock detection (in milliseconds).",
+      "type": "REG_DWORD",
+      "category": "Performance"
+    },
+    "PendingFileRenameOperations": {
+      "description": "Specifies files to be renamed or deleted after reboot (used by installers).",
+      "type": "REG_MULTI_SZ",
+      "category": "System Core"
     }
   },
   "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services": {
     "*": {
-      "description": "Each subkey represents a system service or driver configuration.",
+      "description": "Each subkey represents a system service or driver configuration. Contains settings such as Start, Type, and ImagePath.",
       "type": "complex",
       "category": "System Core"
     }
   },
-  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters": {
-    "Hostname": {
-      "description": "Specifies the local computer name used by TCP/IP.",
-      "type": "REG_SZ",
-      "category": "Network"
-    },
-    "NameServer": {
-      "description": "Defines one or more DNS servers for name resolution.",
-      "type": "REG_SZ",
-      "category": "Network"
-    },
-    "Tcp1323Opts": {
-      "description": "Enables TCP Window Scaling and Timestamps (RFC 1323).",
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+    "CacheHashTableSize": {
+      "description": "Specifies the size of the DNS resolver cache hash table.",
       "type": "DWORD",
-      "values": {
-        "0": "Disabled",
-        "1": "Window scaling only",
-        "2": "Timestamps only",
-        "3": "Both enabled"
-      },
+      "category": "Performance"
+    },
+    "MaxCacheTtl": {
+      "description": "Maximum time (in seconds) a positive DNS record is cached.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "MaxNegativeCacheTtl": {
+      "description": "Maximum time (in seconds) a failed DNS query (negative response) is cached.",
+      "type": "DWORD",
       "category": "Network"
     }
   },
@@ -685,23 +734,402 @@
       "type": "DWORD",
       "values": { "0": "Disabled", "1": "Enabled" },
       "category": "Network"
+    },
+    "EnableAuthenticateUserSharing": {
+      "description": "Determines whether password-protected sharing is required.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "SrvComment": {
+      "description": "Specifies the server description (visible to other computers in the network).",
+      "type": "REG_SZ",
+      "category": "Network"
     }
   },
-  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Windows": {
-    "ErrorMode": {
-      "description": "Controls how Windows handles system errors and critical alerts.",
-      "type": "REG_DWORD",
-      "values": {
-        "0": "All error dialogs enabled",
-        "1": "No system error dialogs",
-        "2": "Fail silently"
-      },
-      "category": "System Core"
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters": {
+    "DefaultTTL": {
+      "description": "Default Time-to-Live (TTL) for outgoing IP packets.",
+      "type": "DWORD",
+      "category": "Network"
     },
-    "ShutdownTime": {
-      "description": "Timestamp of the last successful system shutdown.",
+    "DhcpNameServer": {
+      "description": "DNS servers obtained automatically via DHCP.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "EnableDeadGWDetect": {
+      "description": "Enables detection and failover when the default gateway becomes unavailable.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnableICMPRedirect": {
+      "description": "Determines whether TCP/IP accepts ICMP redirect packets to update routing tables.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnableIPv6": {
+      "description": "Determines whether IPv6 is enabled on the system.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnablePMTUDiscovery": {
+      "description": "Controls Path MTU Discovery to determine optimal packet size.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnableRSS": {
+      "description": "Controls Receive-Side Scaling to distribute network load across CPU cores.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "EnableTCPA": {
+      "description": "Enables TCP Chimney Offload (hardware acceleration of TCP processing).",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "Hostname": {
+      "description": "Specifies the local computer name used by TCP/IP.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "NameServer": {
+      "description": "Defines one or more DNS servers for name resolution (space- or comma-separated).",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "NV Domain": {
+      "description": "Stores the non-volatile version of the domain name.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "NV Hostname": {
+      "description": "Stores the non-volatile version of the hostname (persisted name).",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "SearchList": {
+      "description": "Specifies a comma-separated list of DNS suffixes to use when resolving short names.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "Tcp1323Opts": {
+      "description": "Enables TCP Window Scaling and Timestamps (RFC 1323).",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Window scaling only", "2": "Timestamps only", "3": "Both enabled" },
+      "category": "Network"
+    },
+    "TcpMaxConnectRetransmissions": {
+      "description": "Number of times TCP retransmits SYN before giving up on a connection attempt.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "TcpMaxDataRetransmissions": {
+      "description": "Sets how many times TCP retransmits unacknowledged data before dropping the connection.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "TcpTimedWaitDelay": {
+      "description": "Specifies how long (in seconds) TCP connections remain in TIME_WAIT state.",
+      "type": "DWORD",
+      "category": "Network"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+    "AllowTelemetry": {
+      "description": "Controls the level of diagnostic and telemetry data sent to Microsoft.",
+      "type": "DWORD",
+      "values": { "0": "Security (minimum)", "1": "Basic", "2": "Enhanced", "3": "Full" },
+      "category": "Privacy"
+    },
+    "MaxTelemetryAllowed": {
+      "description": "Defines the maximum allowed telemetry level on managed devices.",
+      "type": "DWORD",
+      "category": "Privacy"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization": {
+    "DOMaxDownloadBandwidth": {
+      "description": "Specifies maximum download bandwidth (in KB/s) for Delivery Optimization.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "DOMaxUploadBandwidth": {
+      "description": "Specifies maximum upload bandwidth (in KB/s) for Delivery Optimization.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "DODownloadMode": {
+      "description": "Controls Delivery Optimization behavior for peer-to-peer update downloads.",
+      "type": "DWORD",
+      "values": { "0": "HTTP only", "1": "LAN (same NAT)", "2": "Group (AD or AAD)", "3": "Internet (P2P across internet)", "99": "Simple (fallback)" },
+      "category": "Network"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\EdgeUI": {
+    "DisableHelpSticker": {
+      "description": "Removes 'Get help' tips and promotional stickers from the UI.",
+      "type": "DWORD",
+      "values": { "0": "Shown", "1": "Hidden" },
+      "category": "Privacy"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Feedback": {
+    "DisableFeedback": {
+      "description": "Disables all feedback notifications and requests from Windows Feedback Hub.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    },
+    "NumberOfSIUFInPeriod": {
+      "description": "Specifies how many feedback prompts appear within a feedback period.",
+      "type": "DWORD",
+      "category": "Privacy"
+    },
+    "PeriodInNanoSeconds": {
+      "description": "Defines the length of the feedback period in nanoseconds.",
+      "type": "DWORD",
+      "category": "Privacy"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+    "AllowDomainPINLogon": {
+      "description": "Determines whether users can sign in to domain accounts using PIN or Hello.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "BlockDomainPINLogon": {
+      "description": "Prevents domain accounts from signing in using PIN (Windows Hello).",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Blocked" },
+      "category": "Security"
+    },
+    "BlockDomainPicturePassword": {
+      "description": "Prevents domain accounts from using picture passwords.",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Blocked" },
+      "category": "Security"
+    },
+    "DisableAutomaticRestartSignOn": {
+      "description": "Prevents automatic user sign-in after updates or restart.",
+      "type": "DWORD",
+      "values": { "0": "Allow", "1": "Prevent" },
+      "category": "Privacy"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate": {
+    "DoNotConnectToWindowsUpdateInternetLocations": {
+      "description": "Prevents the system from connecting to Microsoft’s public Windows Update servers.",
+      "type": "DWORD",
+      "values": { "0": "Allow connection", "1": "Block connection" },
+      "category": "Updates"
+    },
+    "TargetGroup": {
+      "description": "Specifies the target group name used by WSUS for update deployment classification.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "TargetGroupEnabled": {
+      "description": "Specifies whether the WSUS target group policy is enabled.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Updates"
+    },
+    "WUServer": {
+      "description": "Specifies the address of the internal Windows Server Update Services (WSUS) server.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "WUStatusServer": {
+      "description": "Specifies the URL where client computers send status reports for WSUS.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU": {
+    "AUOptions": {
+      "description": "Defines how updates are installed automatically.",
+      "type": "DWORD",
+      "values": { "2": "Notify for download and notify for install", "3": "Auto download and notify for install", "4": "Auto download and schedule install", "5": "Allow local admin to choose setting" },
+      "category": "Updates"
+    },
+    "NoAutoUpdate": {
+      "description": "Disables automatic updates when set to 1.",
+      "type": "DWORD",
+      "values": { "0": "Auto Update enabled", "1": "Auto Update disabled" },
+      "category": "Updates"
+    },
+    "NoAutoRebootWithLoggedOnUsers": {
+      "description": "Prevents automatic restart if a user is currently logged on.",
+      "type": "DWORD",
+      "values": { "0": "Allow auto reboot", "1": "Prevent reboot when logged on" },
+      "category": "Updates"
+    },
+    "RebootRelaunchTimeout": {
+      "description": "Specifies the time (in minutes) before the system automatically restarts after updates.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "RebootRelaunchTimeoutEnabled": {
+      "description": "Specifies whether the reboot relaunch timeout is enforced.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Updates"
+    },
+    "RescheduleWaitTime": {
+      "description": "Defines the number of minutes to wait before retrying a missed scheduled installation.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "ScheduledInstallDay": {
+      "description": "Specifies which day of the week updates are installed. 0 = Every day, 1–7 = Sunday–Saturday.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "ScheduledInstallTime": {
+      "description": "Specifies the hour of the day (in 24-hour format) for automatic updates installation.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "UseWUServer": {
+      "description": "Forces the client to use the specified WSUS server instead of Microsoft Update.",
+      "type": "DWORD",
+      "values": { "0": "Microsoft Update", "1": "Internal WSUS server" },
+      "category": "Updates"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update": {
+    "NextDetectionTime": {
+      "description": "Specifies the next scheduled time for Windows Update to check for updates.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "Results": {
+      "description": "Stores the results of the last update detection run (internal use).",
       "type": "REG_BINARY",
-      "category": "System Core"
+      "category": "Updates"
+    },
+    "ScheduledInstallDate": {
+      "description": "Specifies the next scheduled date for automatic updates installation.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
+    "AllowAutoWindowsUpdateDownloadOverMeteredNetwork": {
+      "description": "Allows Windows to download updates even when connected to a metered network.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "DeferFeatureUpdatesPeriodInDays": {
+      "description": "Number of days to defer feature updates after their release.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "DeferQualityUpdatesPeriodInDays": {
+      "description": "Number of days to defer quality (security) updates after their release.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "FlightSettingsMaxDownloadLimit": {
+      "description": "Specifies the maximum allowed bandwidth percentage for update downloads on flighted builds.",
+      "type": "DWORD",
+      "category": "Performance"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+    "LinkResolveIgnoreLinkInfo": {
+      "description": "Disables resolving .lnk file paths using LinkInfo data.",
+      "type": "DWORD",
+      "category": "User Interface"
+    },
+    "NoControlPanel": {
+      "description": "Hides or disables Control Panel access.",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Blocked" },
+      "category": "User Interface"
+    },
+    "NoLowDiskSpaceChecks": {
+      "description": "Disables low disk space warning pop-ups.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "User Interface"
+    },
+    "NoResolveTrack": {
+      "description": "Prevents automatic correction of broken shortcuts.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "User Interface"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent": {
+    "DisableConsumerFeatures": {
+      "description": "Prevents Windows from installing consumer experiences and suggested apps.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    },
+    "DisableSoftLanding": {
+      "description": "Disables automatic sign-in suggestions and Microsoft account prompts.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    },
+    "DisableWindowsConsumerFeatures": {
+      "description": "Stops Windows from downloading consumer-oriented content after setup.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo": {
+    "DisabledByGroupPolicy": {
+      "description": "Disables personalized advertising by turning off the advertising ID.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    }
+  },
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings": {
+    "AutoConfigURL": {
+      "description": "Specifies the URL to a PAC (Proxy Auto-Config) script.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "AutoDetect": {
+      "description": "Determines whether automatic proxy detection (WPAD) is enabled.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "ProxyEnable": {
+      "description": "Determines whether a proxy server is used for HTTP/HTTPS connections.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "ProxyOverride": {
+      "description": "Defines a list of addresses that bypass the proxy server.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "ProxyServer": {
+      "description": "Specifies the address and port of the proxy server.",
+      "type": "REG_SZ",
+      "category": "Network"
+    }
+  },
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders": {
+    "Common Startup": {
+      "description": "Specifies the physical folder path where startup shortcuts for all users are stored.",
+      "type": "REG_SZ",
+      "category": "Startup"
     }
   }
 }
