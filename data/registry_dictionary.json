@@ -1,7 +1,8 @@
+# System & Security Policies
 {
   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
     "EnableLUA": {
-      "description": "Controls User Account Control (UAC). When 0, UAC prompts are disabled (not recommended); when 1, UAC is enabled.",
+      "description": "Controls User Account Control (UAC). When 0, UAC prompts are disabled; when 1, UAC is enabled.",
       "type": "DWORD",
       "values": {
         "0": "UAC Disabled",
@@ -10,102 +11,2025 @@
       "category": "Security"
     },
     "ConsentPromptBehaviorAdmin": {
-      "description": "Controls the behavior of UAC prompts for administrators.",
+      "description": "Determines how UAC prompts administrators when elevated privileges are requested.",
+      "type": "DWORD",
+      "values": {
+        "0": "Elevate without prompting",
+        "1": "Prompt for credentials on secure desktop",
+        "2": "Prompt for consent on secure desktop",
+        "3": "Prompt for credentials",
+        "4": "Prompt for consent",
+        "5": "Prompt for consent for non-Windows binaries (default)"
+      },
+      "category": "Security"
+    },
+    "ConsentPromptBehaviorUser": {
+      "description": "Controls UAC behavior for standard users when administrative privileges are required.",
       "type": "DWORD",
       "values": {
         "0": "Automatically deny elevation requests",
-        "1": "Prompt for credentials on the secure desktop",
-        "2": "Prompt for consent on the secure desktop",
-        "5": "Prompt for consent (default for admins)"
+        "1": "Prompt for credentials on the secure desktop"
+      },
+      "category": "Security"
+    },
+    "PromptOnSecureDesktop": {
+      "description": "Specifies whether elevation prompts appear on the secure desktop or the user's desktop.",
+      "type": "DWORD",
+      "values": {
+        "0": "Prompt on user's desktop",
+        "1": "Prompt on secure desktop (recommended)"
+      },
+      "category": "Security"
+    },
+    "EnableInstallerDetection": {
+      "description": "Determines whether the system detects installer programs and requests elevation automatically.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      },
+      "category": "Security"
+    },
+    "ValidateAdminCodeSignatures": {
+      "description": "Specifies whether Windows enforces digital signature validation for elevated applications.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled (default)",
+        "1": "Enabled"
+      },
+      "category": "Security"
+    },
+    "FilterAdministratorToken": {
+      "description": "Controls Admin Approval Mode for the built-in Administrator account.",
+      "type": "DWORD",
+      "values": {
+        "0": "Admin Approval Mode disabled (default)",
+        "1": "Admin Approval Mode enabled"
+      },
+      "category": "Security"
+    },
+    "EnableVirtualization": {
+      "description": "Controls file and registry virtualization for legacy applications that write to protected locations.",
+      "type": "DWORD",
+      "values": {
+        "0": "Virtualization disabled",
+        "1": "Virtualization enabled"
+      },
+      "category": "Compatibility"
+    },
+    "EnableSecureUIAPaths": {
+      "description": "Enforces secure paths for UI Automation accessibility applications.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      },
+      "category": "Accessibility"
+    },
+    "LegalNoticeCaption": {
+      "description": "Specifies the title of the legal notice displayed before logon.",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "LegalNoticeText": {
+      "description": "Specifies the text of the legal notice displayed before logon.",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "DontDisplayLastUserName": {
+      "description": "Hides the name of the last user who logged on at the logon screen.",
+      "type": "DWORD",
+      "values": {
+        "0": "Show last logged-on user name (default)",
+        "1": "Do not display last user name"
+      },
+      "category": "Security"
+    },
+    "ShutdownWithoutLogon": {
+      "description": "Allows the computer to be shut down from the logon screen without logging in.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled (default)"
+      },
+      "category": "System Core"
+    },
+    "UndockWithoutLogon": {
+      "description": "Allows portable computers to undock without logging on.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      },
+      "category": "System Core"
+    },
+    "DisableCAD": {
+      "description": "Removes the requirement to press Ctrl+Alt+Del before logging on.",
+      "type": "DWORD",
+      "values": {
+        "0": "Ctrl+Alt+Del required (default)",
+        "1": "Ctrl+Alt+Del not required"
       },
       "category": "Security"
     }
-  },
-
+  }
+}
+# Startup and Run Keys
+{
   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
     "*": {
-      "description": "Programs listed here are configured to run automatically when Windows starts (system-wide). Value name = friendly name, value data = command or path.",
+      "description": "Specifies applications that automatically start for all users at system startup.",
       "type": "REG_SZ",
-      "values": {},
       "category": "Startup"
     }
   },
 
   "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
     "*": {
-      "description": "Programs listed here run automatically at user logon (per-user). Value name = friendly name, value data = command or path.",
+      "description": "Specifies programs that automatically start when the current user logs in.",
       "type": "REG_SZ",
-      "values": {},
       "category": "Startup"
     }
   },
 
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce": {
+    "*": {
+      "description": "Programs listed here run once for all users at the next system startup and are then removed.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce": {
+    "*": {
+      "description": "Programs listed here run once at the next user logon and are then deleted by the system.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run": {
+    "*": {
+      "description": "Startup programs configured via Group Policy. These entries execute at system startup for all users.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run": {
+    "*": {
+      "description": "User-specific startup programs configured via Group Policy.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run": {
+    "*": {
+      "description": "Startup programs for 32-bit applications on 64-bit Windows. Executes for all users at startup.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders": {
+    "Common Startup": {
+      "description": "Specifies the physical folder path where startup shortcuts for all users are stored.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders": {
+    "Startup": {
+      "description": "Specifies the folder path for the current user’s Startup folder.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    }
+  }
+}
+# Desktop & User Interface Settings
+{
   "HKEY_CURRENT_USER\\Control Panel\\Desktop": {
     "Wallpaper": {
-      "description": "Path to the current desktop wallpaper image file.",
+      "description": "Specifies the path to the current desktop wallpaper image.",
       "type": "REG_SZ",
-      "values": {},
+      "category": "User Interface"
+    },
+    "WallpaperStyle": {
+      "description": "Determines how the desktop wallpaper is displayed (stretched, centered, tiled, etc.).",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Centered",
+        "1": "Tiled",
+        "2": "Stretched",
+        "3": "Fit",
+        "4": "Fill",
+        "5": "Span"
+      },
+      "category": "User Interface"
+    },
+    "TileWallpaper": {
+      "description": "Specifies whether the wallpaper is tiled across the desktop.",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Not Tiled",
+        "1": "Tiled"
+      },
       "category": "User Interface"
     },
     "ScreenSaveActive": {
-      "description": "Indicates whether the screen saver is active for the current user.",
+      "description": "Determines whether the screen saver is active.",
       "type": "REG_SZ",
-      "values": {
-        "0": "Screen saver disabled",
-        "1": "Screen saver enabled"
-      },
-      "category": "User Interface"
-    }
-  },
-
-  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services": {
-    "*": {
-      "description": "Each subkey represents a system service or driver. Important values include 'Start' (when the service starts) and 'ImagePath' (binary path).",
-      "type": "complex",
-      "values": {
-        "Start": "Service start type (0: Boot, 1: System, 2: Automatic, 3: Manual, 4: Disabled)",
-        "ImagePath": "Path to service executable or driver"
-      },
-      "category": "System Core"
-    }
-  },
-
-  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters": {
-    "EnableDeadGWDetect": {
-      "description": "Determines whether Windows will detect and switch to alternate default gateways when the current gateway is unreachable.",
-      "type": "DWORD",
       "values": {
         "0": "Disabled",
         "1": "Enabled"
       },
-      "category": "Network"
+      "category": "User Interface"
     },
-    "Hostname": {
-      "description": "Computer network name (hostname) used for certain network operations.",
+    "SCRNSAVE.EXE": {
+      "description": "Specifies the path to the screen saver executable file.",
       "type": "REG_SZ",
-      "values": {},
-      "category": "Network"
+      "category": "User Interface"
+    },
+    "ScreenSaveTimeOut": {
+      "description": "Specifies the idle time (in seconds) before the screen saver activates.",
+      "type": "REG_SZ",
+      "category": "User Interface"
+    },
+    "CursorBlinkRate": {
+      "description": "Controls the text cursor blink rate in milliseconds.",
+      "type": "REG_SZ",
+      "category": "Accessibility"
+    },
+    "FontSmoothing": {
+      "description": "Enables or disables font smoothing (anti-aliasing) for on-screen text.",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      },
+      "category": "User Interface"
+    },
+    "FontSmoothingType": {
+      "description": "Specifies the type of font smoothing used.",
+      "type": "DWORD",
+      "values": {
+        "1": "Standard",
+        "2": "ClearType"
+      },
+      "category": "User Interface"
+    },
+    "MenuShowDelay": {
+      "description": "Sets the delay (in milliseconds) before a menu is displayed after being pointed at.",
+      "type": "REG_SZ",
+      "category": "Performance"
+    },
+    "WindowArrangementActive": {
+      "description": "Determines whether window snapping (Aero Snap) is enabled.",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      },
+      "category": "User Interface"
+    },
+    "DragFullWindows": {
+      "description": "Controls whether window contents are shown while dragging.",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Show outline only",
+        "1": "Show contents while dragging"
+      },
+      "category": "User Interface"
+    },
+    "UserPreferencesMask": {
+      "description": "Binary configuration data that stores user interface effects (animations, shadows, etc.).",
+      "type": "REG_BINARY",
+      "category": "User Interface"
+    },
+    "ForegroundLockTimeout": {
+      "description": "Specifies how long (in milliseconds) the system waits before allowing a background window to take focus.",
+      "type": "DWORD",
+      "category": "System Core"
+    },
+    "HungAppTimeout": {
+      "description": "Determines how long the system waits (in milliseconds) for an unresponsive application before prompting to close it.",
+      "type": "REG_SZ",
+      "category": "Performance"
+    },
+    "WaitToKillAppTimeout": {
+      "description": "Specifies the time (in milliseconds) the system waits before ending user processes during shutdown.",
+      "type": "REG_SZ",
+      "category": "Performance"
+    },
+    "AutoEndTasks": {
+      "description": "Determines whether the system automatically closes applications that are not responding during shutdown.",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Ask before closing",
+        "1": "Automatically close"
+      },
+      "category": "System Core"
+    }
+  }
+}
+# Performance & Power Settings
+{
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+    "HibernateEnabled": {
+      "description": "Determines whether hibernation is enabled on the system.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    },
+    "HiberFileType": {
+      "description": "Specifies the type of hibernation file: full or reduced.",
+      "type": "DWORD",
+      "values": { "0": "Full", "1": "Reduced" },
+      "category": "Performance"
+    },
+    "HiberbootEnabled": {
+      "description": "Controls Fast Startup feature. When enabled, Windows uses hybrid boot to resume faster.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    },
+    "CsEnabled": {
+      "description": "Indicates whether the system supports and allows Connected Standby (Modern Standby).",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "Attributes": {
+      "description": "Controls the visibility of advanced power settings in the Control Panel.",
+      "type": "DWORD",
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management": {
+    "ClearPageFileAtShutdown": {
+      "description": "When enabled, the system clears the page file at shutdown for security. Increases shutdown time.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    },
+    "LargeSystemCache": {
+      "description": "Determines whether the system maintains a large file system cache (1 = optimized for server).",
+      "type": "DWORD",
+      "values": { "0": "Workstation mode", "1": "Server cache mode" },
+      "category": "Performance"
+    },
+    "DisablePagingExecutive": {
+      "description": "Prevents the operating system from paging kernel drivers and system code to disk.",
+      "type": "DWORD",
+      "values": { "0": "Allow paging", "1": "Keep in memory" },
+      "category": "Performance"
+    },
+    "PagingFiles": {
+      "description": "Lists pagefile paths and sizes. Example: C:\\pagefile.sys 0 0 (system-managed).",
+      "type": "MULTI_SZ",
+      "category": "Performance"
+    },
+    "SecondLevelDataCache": {
+      "description": "Specifies the size of the CPU L2 cache in KB. Usually detected automatically; manual override not recommended.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "IoPageLockLimit": {
+      "description": "Sets the maximum amount of memory that can be locked for I/O operations. Advanced tuning parameter.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "PrefetchParameters": {
+      "EnablePrefetcher": {
+        "description": "Controls Windows Prefetcher (boot and application preloading).",
+        "type": "DWORD",
+        "values": {
+          "0": "Disabled",
+          "1": "Application launch only",
+          "2": "Boot only",
+          "3": "Both boot and application"
+        },
+        "category": "Performance"
+      },
+      "EnableSuperfetch": {
+        "description": "Controls Superfetch (SysMain) caching behavior.",
+        "type": "DWORD",
+        "values": {
+          "0": "Disabled",
+          "1": "Applications only",
+          "2": "Boot only",
+          "3": "Full (both)"
+        },
+        "category": "Performance"
+      },
+      "EnableBootTrace": {
+        "description": "Enables boot tracing for performance diagnostics.",
+        "type": "DWORD",
+        "values": { "0": "Disabled", "1": "Enabled" },
+        "category": "Performance"
+      }
     }
   },
 
   "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control": {
     "WaitToKillServiceTimeout": {
-      "description": "Time in milliseconds Windows waits for services to stop before forcing termination during shutdown/restart.",
+      "description": "Time in milliseconds that Windows waits for services to stop before forcing termination during shutdown.",
       "type": "REG_SZ",
-      "values": {},
       "category": "Performance"
+    },
+    "ServicesPipeTimeout": {
+      "description": "Defines how long the Service Control Manager waits for a service to start before timing out.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "BootDriverFlags": {
+      "description": "Bitmask flags controlling how boot drivers are loaded during startup.",
+      "type": "DWORD",
+      "category": "System Core"
+    },
+    "SvcHostSplitThresholdInKB": {
+      "description": "Controls memory thresholds for splitting svchost.exe instances. Higher values combine services to reduce memory use.",
+      "type": "DWORD",
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Prefetcher": {
+    "EnablePrefetcher": {
+      "description": "Controls prefetching for faster application and system startup.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Application launch only",
+        "2": "Boot only",
+        "3": "Full (both)"
+      },
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+    "AutoChkTimeOut": {
+      "description": "Sets the timeout (in seconds) for AutoChk (CHKDSK) during startup before continuing boot automatically.",
+      "type": "REG_SZ",
+      "category": "System Core"
+    },
+    "BootExecute": {
+      "description": "Defines boot-time commands. Default value is 'autocheck autochk *'.",
+      "type": "MULTI_SZ",
+      "category": "System Core"
+    }
+  }
+}
+# Network Settings
+{
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters": {
+    "Hostname": {
+      "description": "Specifies the local computer name used by TCP/IP.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "Domain": {
+      "description": "Specifies the primary DNS suffix for the computer.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "NV Hostname": {
+      "description": "Stores the non-volatile version of the hostname (persisted name).",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "NV Domain": {
+      "description": "Stores the non-volatile version of the domain name.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "NameServer": {
+      "description": "Defines one or more DNS servers for name resolution (space- or comma-separated).",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "DhcpNameServer": {
+      "description": "DNS servers obtained automatically via DHCP.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "SearchList": {
+      "description": "Specifies a comma-separated list of DNS suffixes to use when resolving short names.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "EnableDeadGWDetect": {
+      "description": "Enables detection and failover when the default gateway becomes unavailable.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnablePMTUDiscovery": {
+      "description": "Controls Path MTU Discovery to determine optimal packet size.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "Tcp1323Opts": {
+      "description": "Enables TCP Window Scaling and Timestamps (RFC 1323).",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Window scaling only",
+        "2": "Timestamps only",
+        "3": "Both enabled"
+      },
+      "category": "Network"
+    },
+    "TcpTimedWaitDelay": {
+      "description": "Specifies how long (in seconds) TCP connections remain in TIME_WAIT state.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "TcpMaxDataRetransmissions": {
+      "description": "Sets how many times TCP retransmits unacknowledged data before dropping the connection.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "DefaultTTL": {
+      "description": "Default Time-to-Live (TTL) for outgoing IP packets.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "TcpMaxConnectRetransmissions": {
+      "description": "Number of times TCP retransmits SYN before giving up on a connection attempt.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "EnableICMPRedirect": {
+      "description": "Determines whether TCP/IP accepts ICMP redirect packets to update routing tables.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnableTCPA": {
+      "description": "Enables TCP Chimney Offload (hardware acceleration of TCP processing).",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "EnableRSS": {
+      "description": "Controls Receive-Side Scaling to distribute network load across CPU cores.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "EnableIPv6": {
+      "description": "Determines whether IPv6 is enabled on the system.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+    "CacheHashTableSize": {
+      "description": "Specifies the size of the DNS resolver cache hash table.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "MaxCacheTtl": {
+      "description": "Maximum time (in seconds) a positive DNS record is cached.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "MaxNegativeCacheTtl": {
+      "description": "Maximum time (in seconds) a failed DNS query (negative response) is cached.",
+      "type": "DWORD",
+      "category": "Network"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+    "AutoShareWks": {
+      "description": "Controls automatic creation of administrative shares (C$, D$, ADMIN$).",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "EnableAuthenticateUserSharing": {
+      "description": "Determines whether password-protected sharing is required.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "SrvComment": {
+      "description": "Specifies the server description (visible to other computers in the network).",
+      "type": "REG_SZ",
+      "category": "Network"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile": {
+    "EnableFirewall": {
+      "description": "Enables or disables the Windows Firewall for the domain network profile.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "DefaultInboundAction": {
+      "description": "Specifies the default inbound traffic behavior when no rule matches.",
+      "type": "DWORD",
+      "values": { "0": "Allow", "1": "Block" },
+      "category": "Security"
+    },
+    "DefaultOutboundAction": {
+      "description": "Specifies the default outbound traffic behavior when no rule matches.",
+      "type": "DWORD",
+      "values": { "0": "Allow", "1": "Block" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings": {
+    "ProxyEnable": {
+      "description": "Determines whether a proxy server is used for HTTP/HTTPS connections.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "ProxyServer": {
+      "description": "Specifies the address and port of the proxy server.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "ProxyOverride": {
+      "description": "Defines a list of addresses that bypass the proxy server.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "AutoConfigURL": {
+      "description": "Specifies the URL to a PAC (Proxy Auto-Config) script.",
+      "type": "REG_SZ",
+      "category": "Network"
+    },
+    "AutoDetect": {
+      "description": "Determines whether automatic proxy detection (WPAD) is enabled.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    }
+  }
+}
+# System Core & Services
+{
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+    "CrashDumpEnabled": {
+      "description": "Controls whether the system writes a dump file when a crash (BSOD) occurs.",
+      "type": "DWORD",
+      "values": {
+        "0": "No dump",
+        "1": "Complete memory dump",
+        "2": "Kernel memory dump",
+        "3": "Small (256KB) dump",
+        "7": "Automatic memory dump"
+      },
+      "category": "System Core"
+    },
+    "DumpFile": {
+      "description": "Specifies the path where memory dump files are written. Default is %SystemRoot%\\MEMORY.DMP.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "Overwrite": {
+      "description": "Determines whether existing dump files are overwritten automatically.",
+      "type": "DWORD",
+      "values": { "0": "Do not overwrite", "1": "Overwrite existing dump" },
+      "category": "System Core"
+    },
+    "LogEvent": {
+      "description": "When enabled, logs crash dump generation events to the system event log.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    },
+    "SendAlert": {
+      "description": "When enabled, sends an administrative alert when a system crash occurs.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    },
+    "AutoReboot": {
+      "description": "When enabled, the system automatically reboots after a crash.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\ServicesPipeTimeout": {
+    "description": "Defines how long the Service Control Manager waits for services to start before timing out (in milliseconds).",
+    "type": "DWORD",
+    "category": "System Core"
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+    "CriticalSectionTimeout": {
+      "description": "Specifies how long a thread waits before declaring a critical section deadlock.",
+      "type": "DWORD",
+      "category": "System Core"
+    },
+    "ProtectionMode": {
+      "description": "Determines whether file protection is active to prevent unauthorized replacement of system files.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services": {
+    "*": {
+      "description": "Each subkey represents a system service or driver configuration. Contains settings such as Start, Type, and ImagePath.",
+      "type": "complex",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\EventLog\\System": {
+    "MaxSize": {
+      "description": "Specifies the maximum size (in bytes) of the System event log before it overwrites old events.",
+      "type": "DWORD",
+      "category": "System Core"
+    },
+    "Retention": {
+      "description": "Controls whether older events are overwritten or retained. 0 = Overwrite, 1 = Do not overwrite.",
+      "type": "DWORD",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Windows": {
+    "ErrorMode": {
+      "description": "Controls how the system handles application errors and critical messages.",
+      "type": "DWORD",
+      "values": {
+        "0": "Display all errors",
+        "1": "Fail critical errors",
+        "2": "Ignore all errors"
+      },
+      "category": "System Core"
+    },
+    "ShutdownTime": {
+      "description": "Records the time when Windows was last shut down successfully (binary format).",
+      "type": "REG_BINARY",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
+    "LimitBlankPasswordUse": {
+      "description": "Prevents local accounts with blank passwords from being used to log in over the network.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "ForceGuest": {
+      "description": "Determines whether network logons that cannot be authenticated are forced to Guest account access.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "NoLMHash": {
+      "description": "Prevents storage of LAN Manager (LM) password hashes for improved security.",
+      "type": "DWORD",
+      "values": { "0": "Store LM hashes", "1": "Do not store LM hashes" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+    "AutoRestartShell": {
+      "description": "Automatically restarts the Windows shell (Explorer.exe) if it crashes.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    },
+    "Shell": {
+      "description": "Specifies the program used as the default shell. Default is explorer.exe.",
+      "type": "REG_SZ",
+      "category": "System Core"
+    },
+    "Userinit": {
+      "description": "Specifies programs that run automatically when a user logs on. Default includes userinit.exe.",
+      "type": "REG_SZ",
+      "category": "Startup"
+    },
+    "GinaDLL": {
+      "description": "Specifies a custom GINA DLL for handling logon authentication. Deprecated in modern Windows.",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "ShutdownWithoutLogon": {
+      "description": "Controls whether the Shut Down button appears on the Windows logon screen.",
+      "type": "DWORD",
+      "values": { "0": "Hidden", "1": "Visible" },
+      "category": "Security"
+    }
+  }
+}
+# Windows Update & Maintenance
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate": {
+    "WUServer": {
+      "description": "Specifies the address of the internal Windows Server Update Services (WSUS) server.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "WUStatusServer": {
+      "description": "Specifies the URL where client computers send status reports for WSUS.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "DoNotConnectToWindowsUpdateInternetLocations": {
+      "description": "Prevents the system from connecting to Microsoft’s public Windows Update servers.",
+      "type": "DWORD",
+      "values": { "0": "Allow connection", "1": "Block connection" },
+      "category": "Updates"
+    },
+    "TargetGroupEnabled": {
+      "description": "Specifies whether the WSUS target group policy is enabled.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Updates"
+    },
+    "TargetGroup": {
+      "description": "Specifies the target group name used by WSUS for update deployment classification.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "DisableWindowsUpdateAccess": {
+      "description": "Completely disables access to the Windows Update user interface.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Updates"
     }
   },
 
   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU": {
     "NoAutoUpdate": {
-      "description": "When set, disables automatic Windows Updates according to policy. (Managed by Group Policy in many environments.)",
+      "description": "Disables automatic updates when set to 1.",
+      "type": "DWORD",
+      "values": { "0": "Auto Update enabled", "1": "Auto Update disabled" },
+      "category": "Updates"
+    },
+    "AUOptions": {
+      "description": "Defines how updates are installed automatically.",
       "type": "DWORD",
       "values": {
-        "0": "Automatic updates allowed",
-        "1": "Automatic updates disabled"
+        "2": "Notify for download and notify for install",
+        "3": "Auto download and notify for install",
+        "4": "Auto download and schedule install",
+        "5": "Allow local admin to choose setting"
       },
       "category": "Updates"
+    },
+    "ScheduledInstallDay": {
+      "description": "Specifies which day of the week updates are installed. 0 = Every day, 1–7 = Sunday–Saturday.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "ScheduledInstallTime": {
+      "description": "Specifies the hour of the day (in 24-hour format) for automatic updates installation.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "UseWUServer": {
+      "description": "Forces the client to use the specified WSUS server instead of Microsoft Update.",
+      "type": "DWORD",
+      "values": { "0": "Microsoft Update", "1": "Internal WSUS server" },
+      "category": "Updates"
+    },
+    "RebootRelaunchTimeoutEnabled": {
+      "description": "Specifies whether the reboot relaunch timeout is enforced.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Updates"
+    },
+    "RebootRelaunchTimeout": {
+      "description": "Specifies the time (in minutes) before the system automatically restarts after updates.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "RescheduleWaitTime": {
+      "description": "Defines the number of minutes to wait before retrying a missed scheduled installation.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "NoAutoRebootWithLoggedOnUsers": {
+      "description": "Prevents automatic restart if a user is currently logged on.",
+      "type": "DWORD",
+      "values": { "0": "Allow auto reboot", "1": "Prevent reboot when logged on" },
+      "category": "Updates"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update": {
+    "NextDetectionTime": {
+      "description": "Specifies the next scheduled time for Windows Update to check for updates.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    },
+    "Results": {
+      "description": "Stores the results of the last update detection run (internal use).",
+      "type": "REG_BINARY",
+      "category": "Updates"
+    },
+    "ScheduledInstallDate": {
+      "description": "Specifies the next scheduled date for automatic updates installation.",
+      "type": "REG_SZ",
+      "category": "Updates"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
+    "FlightSettingsMaxDownloadLimit": {
+      "description": "Specifies the maximum allowed bandwidth percentage for update downloads on flighted builds.",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "AllowAutoWindowsUpdateDownloadOverMeteredNetwork": {
+      "description": "Allows Windows to download updates even when connected to a metered network.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Network"
+    },
+    "DeferFeatureUpdatesPeriodInDays": {
+      "description": "Number of days to defer feature updates after their release.",
+      "type": "DWORD",
+      "category": "Updates"
+    },
+    "DeferQualityUpdatesPeriodInDays": {
+      "description": "Number of days to defer quality (security) updates after their release.",
+      "type": "DWORD",
+      "category": "Updates"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization": {
+    "DODownloadMode": {
+      "description": "Controls Delivery Optimization behavior for peer-to-peer update downloads.",
+      "type": "DWORD",
+      "values": {
+        "0": "HTTP only",
+        "1": "LAN (same NAT)",
+        "2": "Group (AD or AAD)",
+        "3": "Internet (P2P across internet)",
+        "99": "Simple (fallback)"
+      },
+      "category": "Network"
+    },
+    "DOMaxUploadBandwidth": {
+      "description": "Specifies maximum upload bandwidth (in KB/s) for Delivery Optimization.",
+      "type": "DWORD",
+      "category": "Network"
+    },
+    "DOMaxDownloadBandwidth": {
+      "description": "Specifies maximum download bandwidth (in KB/s) for Delivery Optimization.",
+      "type": "DWORD",
+      "category": "Network"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\Maintenance": {
+    "MaintenanceDisabled": {
+      "description": "Disables automatic system maintenance tasks (like disk optimization, updates, etc.).",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Performance"
+    },
+    "MaintenanceStartTime": {
+      "description": "Defines when daily maintenance tasks are allowed to start (in minutes after midnight).",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "MaintenancePeriod": {
+      "description": "Specifies the duration (in minutes) that daily maintenance is allowed to run.",
+      "type": "DWORD",
+      "category": "Performance"
+    }
+  }
+}
+# Privacy & Telemetry
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+    "AllowTelemetry": {
+      "description": "Controls the diagnostic and usage data level sent to Microsoft.",
+      "type": "DWORD",
+      "values": {
+        "0": "Security (Enterprise only)",
+        "1": "Basic",
+        "2": "Enhanced",
+        "3": "Full"
+      },
+      "category": "Privacy"
+    },
+    "LimitEnhancedDiagnosticDataWindowsAnalytics": {
+      "description": "Restricts enhanced diagnostic data collection for Windows Analytics features.",
+      "type": "DWORD",
+      "values": { "0": "Allow enhanced data", "1": "Limit to basic" },
+      "category": "Privacy"
+    },
+    "DisableTelemetryOptInSettingsUx": {
+      "description": "Removes the telemetry settings page from the Windows Settings app.",
+      "type": "DWORD",
+      "values": { "0": "Visible", "1": "Hidden" },
+      "category": "Privacy"
+    },
+    "AllowDeviceNameInTelemetry": {
+      "description": "Determines whether the device name is included in telemetry reports.",
+      "type": "DWORD",
+      "values": { "0": "Excluded", "1": "Included" },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+    "AllowTelemetry": {
+      "description": "Duplicate key for diagnostic level, effective for consumer editions.",
+      "type": "DWORD",
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\AdvertisingInfo": {
+    "DisabledByGroupPolicy": {
+      "description": "Disables personalized advertising by turning off the advertising ID.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo": {
+    "Enabled": {
+      "description": "Specifies whether the advertising ID is enabled for the current user.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent": {
+    "DisableConsumerFeatures": {
+      "description": "Prevents Windows from installing consumer experiences and suggested apps.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    },
+    "DisableSoftLanding": {
+      "description": "Disables automatic sign-in suggestions and Microsoft account prompts.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    },
+    "DisableWindowsConsumerFeatures": {
+      "description": "Stops Windows from downloading consumer-oriented content after setup.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+    "AllowDomainPINLogon": {
+      "description": "Determines whether users can sign in to domain accounts using PIN or Hello.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "DisableAutomaticRestartSignOn": {
+      "description": "Prevents automatic sign-in after Windows Update restarts.",
+      "type": "DWORD",
+      "values": { "0": "Allow sign-in", "1": "Prevent sign-in" },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\Feedback": {
+    "DisableFeedback": {
+      "description": "Disables all feedback notifications and requests from Windows Feedback Hub.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Privacy"
+    },
+    "NumberOfSIUFInPeriod": {
+      "description": "Specifies how many feedback prompts appear within a feedback period.",
+      "type": "DWORD",
+      "category": "Privacy"
+    },
+    "PeriodInNanoSeconds": {
+      "description": "Defines the length of the feedback period in nanoseconds.",
+      "type": "DWORD",
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Spynet": {
+    "SpyNetReporting": {
+      "description": "Determines participation level in Microsoft MAPS (Microsoft Active Protection Service).",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Basic membership",
+        "2": "Advanced membership"
+      },
+      "category": "Security"
+    },
+    "SubmitSamplesConsent": {
+      "description": "Controls automatic submission of samples to Microsoft Defender for analysis.",
+      "type": "DWORD",
+      "values": {
+        "0": "Always prompt",
+        "1": "Send safe samples automatically",
+        "2": "Never send samples"
+      },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\EdgeUI": {
+    "DisableHelpSticker": {
+      "description": "Removes 'Get help' tips and promotional stickers from the UI.",
+      "type": "DWORD",
+      "values": { "0": "Shown", "1": "Hidden" },
+      "category": "Privacy"
+    }
+  }
+}
+# Explorer & UI Tweaks
+{
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+    "Hidden": {
+      "description": "Controls whether hidden files and folders are shown in File Explorer.",
+      "type": "DWORD",
+      "values": { "1": "Show hidden files", "2": "Do not show hidden files" },
+      "category": "User Interface"
+    },
+    "HideFileExt": {
+      "description": "Hides or shows file extensions for known file types.",
+      "type": "DWORD",
+      "values": { "0": "Show file extensions", "1": "Hide file extensions" },
+      "category": "User Interface"
+    },
+    "ShowSuperHidden": {
+      "description": "Controls visibility of protected operating system files.",
+      "type": "DWORD",
+      "values": { "0": "Do not show", "1": "Show" },
+      "category": "User Interface"
+    },
+    "LaunchTo": {
+      "description": "Specifies the default File Explorer launch view.",
+      "type": "DWORD",
+      "values": { "1": "This PC", "2": "Quick Access" },
+      "category": "User Interface"
+    },
+    "SeparateProcess": {
+      "description": "Determines whether each File Explorer window runs in its own process.",
+      "type": "DWORD",
+      "values": { "0": "Single process", "1": "Separate process per window" },
+      "category": "Performance"
+    },
+    "DontUsePowerShellOnWinX": {
+      "description": "Replaces PowerShell with Command Prompt in the Win+X (right-click Start) menu.",
+      "type": "DWORD",
+      "values": { "0": "Show PowerShell", "1": "Show Command Prompt" },
+      "category": "User Interface"
+    },
+    "EnableBalloonTips": {
+      "description": "Enables or disables system notification balloon tips.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "TaskbarAnimations": {
+      "description": "Enables or disables taskbar animation effects.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "ListviewAlphaSelect": {
+      "description": "Controls translucent selection effects in File Explorer list views.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "ShowCompColor": {
+      "description": "Shows compressed or encrypted files in an alternate color.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "TaskbarSmallIcons": {
+      "description": "Determines whether the taskbar uses small or standard icons.",
+      "type": "DWORD",
+      "values": { "0": "Large icons", "1": "Small icons" },
+      "category": "User Interface"
+    },
+    "AutoCheckSelect": {
+      "description": "Enables checkboxes for selecting multiple items in Explorer.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "EnableXamlStartMenu": {
+      "description": "Determines whether the modern Start menu experience (XAML-based) is used.",
+      "type": "DWORD",
+      "values": { "0": "Classic menu", "1": "Modern Start menu" },
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+    "ShowRecent": {
+      "description": "Controls whether recent files are displayed in Quick Access.",
+      "type": "DWORD",
+      "values": { "0": "Hide recent files", "1": "Show recent files" },
+      "category": "User Interface"
+    },
+    "ShowFrequent": {
+      "description": "Controls whether frequently used folders appear in Quick Access.",
+      "type": "DWORD",
+      "values": { "0": "Hide frequent folders", "1": "Show frequent folders" },
+      "category": "User Interface"
+    },
+    "Reindexed": {
+      "description": "Indicates whether File Explorer has reindexed the user’s Quick Access links.",
+      "type": "DWORD",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StuckRects3": {
+    "Settings": {
+      "description": "Stores binary taskbar position and layout settings (e.g., top/bottom/left/right alignment).",
+      "type": "REG_BINARY",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\DWM": {
+    "EnableAeroPeek": {
+      "description": "Controls whether Aero Peek (desktop preview) is enabled.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "ColorPrevalence": {
+      "description": "Controls whether accent color is applied to title bars and window borders.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    },
+    "Composition": {
+      "description": "Enables or disables the Desktop Window Manager (DWM).",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    },
+    "AccentColor": {
+      "description": "Specifies the RGB color value for accent color on UI elements.",
+      "type": "DWORD",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Control Panel\\Colors": {
+    "WindowText": {
+      "description": "Specifies the RGB color for window text.",
+      "type": "REG_SZ",
+      "category": "User Interface"
+    },
+    "Window": {
+      "description": "Specifies the RGB color for the window background.",
+      "type": "REG_SZ",
+      "category": "User Interface"
+    },
+    "ButtonFace": {
+      "description": "Specifies the RGB color for button backgrounds.",
+      "type": "REG_SZ",
+      "category": "User Interface"
+    },
+    "ButtonText": {
+      "description": "Specifies the RGB color for button text.",
+      "type": "REG_SZ",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+    "NoControlPanel": {
+      "description": "Prevents access to Control Panel and Settings app.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Security"
+    },
+    "NoRun": {
+      "description": "Removes the 'Run' command from the Start menu.",
+      "type": "DWORD",
+      "values": { "0": "Show Run command", "1": "Hide Run command" },
+      "category": "User Interface"
+    },
+    "NoLogoff": {
+      "description": "Removes the Log Off option from the Start menu.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "User Interface"
+    }
+  }
+}
+# User Account & Login Settings
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+    "DontDisplayLastUserName": {
+      "description": "Hides the last logged-in username on the login screen for security.",
+      "type": "DWORD",
+      "values": { "0": "Show last username", "1": "Hide last username" },
+      "category": "Security"
+    },
+    "DisableCAD": {
+      "description": "Determines whether users must press Ctrl+Alt+Del before logging on.",
+      "type": "DWORD",
+      "values": { "0": "Require Ctrl+Alt+Del", "1": "Do not require Ctrl+Alt+Del" },
+      "category": "Security"
+    },
+    "AutoAdminLogon": {
+      "description": "Enables automatic login for the specified user.",
+      "type": "REG_SZ",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "DefaultUserName": {
+      "description": "Specifies the username used for automatic login.",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "DefaultPassword": {
+      "description": "Specifies the password for automatic login (stored in plain text).",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "DefaultDomainName": {
+      "description": "Specifies the domain or local computer name for automatic login.",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "ForceAutoLogon": {
+      "description": "Ensures automatic login continues even after a user logs off.",
+      "type": "REG_SZ",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "PasswordExpiryWarning": {
+      "description": "Specifies how many days before password expiration users receive a warning.",
+      "type": "DWORD",
+      "category": "Security"
+    },
+    "LegalNoticeCaption": {
+      "description": "Title text of the message displayed before logon (legal notice).",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "LegalNoticeText": {
+      "description": "Body text of the message displayed before logon (legal notice content).",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "ShutdownWithoutLogon": {
+      "description": "Allows or disables the shutdown option on the login screen.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+    "PromptOnSecureDesktop": {
+      "description": "Determines whether UAC prompts appear on the secure desktop.",
+      "type": "DWORD",
+      "values": { "0": "Disabled (non-secure desktop)", "1": "Enabled (secure desktop)" },
+      "category": "Security"
+    },
+    "EnableLUA": {
+      "description": "Controls User Account Control (UAC). When disabled, all apps run with admin rights.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "ConsentPromptBehaviorAdmin": {
+      "description": "Defines the UAC prompt behavior for administrators.",
+      "type": "DWORD",
+      "values": {
+        "0": "No prompt (elevate silently)",
+        "1": "Prompt for credentials on secure desktop",
+        "2": "Prompt for consent on secure desktop",
+        "3": "Prompt for credentials",
+        "4": "Prompt for consent",
+        "5": "Prompt for consent for non-Windows binaries"
+      },
+      "category": "Security"
+    },
+    "EnableSecureUIAPaths": {
+      "description": "Restricts UI Automation access to trusted paths only.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "EnableInstallerDetection": {
+      "description": "Controls automatic elevation of installer packages.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+    "BlockDomainPicturePassword": {
+      "description": "Prevents domain accounts from using picture passwords.",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Blocked" },
+      "category": "Security"
+    },
+    "BlockDomainPINLogon": {
+      "description": "Prevents domain accounts from signing in using PIN (Windows Hello).",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Blocked" },
+      "category": "Security"
+    },
+    "AllowDomainPINLogon": {
+      "description": "Enables or disables domain PIN sign-in support (modern Hello).",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "DisableAutomaticRestartSignOn": {
+      "description": "Prevents automatic user sign-in after updates or restart.",
+      "type": "DWORD",
+      "values": { "0": "Allow", "1": "Prevent" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\PasswordLess\\Device": {
+    "DevicePasswordLessBuildVersion": {
+      "description": "Enables or disables passwordless sign-in using Microsoft Hello or PIN.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "2": "Enabled" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\SpecialAccounts\\UserList": {
+    "*": {
+      "description": "Lists user accounts to hide or show on the login screen. Value 0 hides the account.",
+      "type": "DWORD",
+      "values": { "0": "Hidden", "1": "Visible" },
+      "category": "Security"
+    }
+  }
+}
+# Misc & System Environment
+{
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment": {
+    "Path": {
+      "description": "System-wide PATH variable used for locating executable files.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "TEMP": {
+      "description": "Defines the directory path for temporary files used by the system.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "TMP": {
+      "description": "Alternate variable for temporary files (often identical to TEMP).",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "COMSPEC": {
+      "description": "Specifies the path to the command interpreter (usually cmd.exe).",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "PATHEXT": {
+      "description": "Defines which file extensions are treated as executable by default.",
+      "type": "REG_SZ",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Environment": {
+    "Path": {
+      "description": "User-specific PATH variable, appended to the system PATH during process creation.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "TEMP": {
+      "description": "Specifies the current user's temporary file directory.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "TMP": {
+      "description": "Duplicate or alternate temporary directory variable.",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation": {
+    "ActiveTimeBias": {
+      "description": "Specifies the active time bias from UTC, in minutes.",
+      "type": "REG_DWORD",
+      "category": "System Core"
+    },
+    "Bias": {
+      "description": "Specifies the standard time bias from UTC, in minutes.",
+      "type": "REG_DWORD",
+      "category": "System Core"
+    },
+    "StandardName": {
+      "description": "The display name for standard time in the local time zone.",
+      "type": "REG_SZ",
+      "category": "System Core"
+    },
+    "DaylightName": {
+      "description": "The display name for daylight saving time in the local time zone.",
+      "type": "REG_SZ",
+      "category": "System Core"
+    },
+    "DynamicDaylightTimeDisabled": {
+      "description": "Disables automatic daylight saving time adjustments.",
+      "type": "REG_DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Windows": {
+    "ErrorMode": {
+      "description": "Controls how Windows handles system errors and critical alerts.",
+      "type": "REG_DWORD",
+      "values": {
+        "0": "All error dialogs enabled",
+        "1": "No system error dialogs",
+        "2": "Fail silently"
+      },
+      "category": "System Core"
+    },
+    "ShutdownTime": {
+      "description": "Timestamp of the last successful system shutdown.",
+      "type": "REG_BINARY",
+      "category": "System Core"
+    },
+    "CSDVersion": {
+      "description": "Indicates the installed service pack level (e.g., Service Pack 1).",
+      "type": "REG_SZ",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+    "CrashDumpEnabled": {
+      "description": "Specifies whether Windows creates a memory dump when the system crashes.",
+      "type": "REG_DWORD",
+      "values": {
+        "0": "No dump",
+        "1": "Complete memory dump",
+        "2": "Kernel memory dump",
+        "3": "Small memory dump (64 KB)",
+        "7": "Automatic memory dump"
+      },
+      "category": "System Core"
+    },
+    "MinidumpDir": {
+      "description": "Specifies the directory for small memory dump files (minidumps).",
+      "type": "REG_EXPAND_SZ",
+      "category": "System Core"
+    },
+    "AutoReboot": {
+      "description": "Specifies whether the system automatically restarts after a crash.",
+      "type": "REG_DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+    "BootExecute": {
+      "description": "Lists system commands executed during boot (default includes autochk).",
+      "type": "REG_MULTI_SZ",
+      "category": "System Core"
+    },
+    "PendingFileRenameOperations": {
+      "description": "Specifies files to be renamed or deleted after reboot (used by installers).",
+      "type": "REG_MULTI_SZ",
+      "category": "System Core"
+    },
+    "CriticalSectionTimeout": {
+      "description": "Timeout value for critical section deadlock detection (in milliseconds).",
+      "type": "REG_DWORD",
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug": {
+    "Debugger": {
+      "description": "Specifies the debugger command line to run on application crash.",
+      "type": "REG_SZ",
+      "category": "System Core"
+    },
+    "Auto": {
+      "description": "Controls whether the debugger automatically launches on crash.",
+      "type": "REG_SZ",
+      "values": { "0": "Ask before launching", "1": "Auto launch" },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\Diagtrack-Listener": {
+    "Start": {
+      "description": "Controls whether the diagnostics and telemetry tracing session runs automatically.",
+      "type": "REG_DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+    "NtfsDisableLastAccessUpdate": {
+      "description": "Disables updating the last access timestamp on files and folders.",
+      "type": "REG_DWORD",
+      "values": { "0": "Enabled (update timestamps)", "1": "Disabled (performance boost)" },
+      "category": "Performance"
+    },
+    "NtfsMemoryUsage": {
+      "description": "Adjusts how much memory NTFS uses for metadata and caching.",
+      "type": "REG_DWORD",
+      "values": { "1": "Standard", "2": "Increased" },
+      "category": "Performance"
+    },
+    "Win31FileSystem": {
+      "description": "Allows legacy 8.3 filename creation for backward compatibility.",
+      "type": "REG_DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Compatibility"
+    }
+  }
+}
+# Hidden Developer & Advanced System Keys
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options": {
+    "*": {
+      "description": "Allows attaching a debugger to specific executables or globally overriding their behavior.",
+      "type": "complex",
+      "category": "Developer"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SilentProcessExit": {
+    "*": {
+      "description": "Configures behavior when monitored processes exit silently or unexpectedly.",
+      "type": "complex",
+      "category": "Developer"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Diagnostics": {
+    "PerformanceScenarioTracking": {
+      "description": "Enables or disables internal Windows performance scenario logging.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    },
+    "DiagTrackAuthorization": {
+      "description": "Controls whether diagnostics data can be uploaded to Microsoft.",
+      "type": "DWORD",
+      "values": { "0": "Disallowed", "1": "Allowed" },
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+    "AllowTelemetry": {
+      "description": "Controls the level of diagnostic and telemetry data sent to Microsoft.",
+      "type": "DWORD",
+      "values": {
+        "0": "Security (minimum)",
+        "1": "Basic",
+        "2": "Enhanced",
+        "3": "Full"
+      },
+      "category": "Privacy"
+    },
+    "MaxTelemetryAllowed": {
+      "description": "Defines the maximum allowed telemetry level on managed devices.",
+      "type": "DWORD",
+      "category": "Privacy"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CommandStore\\shell": {
+    "*": {
+      "description": "Contains registered right-click (context menu) command definitions.",
+      "type": "complex",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CLASSES_ROOT\\Directory\\Background\\shell": {
+    "*": {
+      "description": "Custom shell commands shown when right-clicking on the desktop or folder background.",
+      "type": "complex",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+    "UseOLEDTaskbarTransparency": {
+      "description": "Enables high-transparency (Acrylic-like) taskbar on supported systems.",
+      "type": "DWORD",
+      "values": { "0": "Standard transparency", "1": "Enhanced transparency" },
+      "category": "User Interface"
+    },
+    "DisallowShaking": {
+      "description": "Disables Aero Shake (minimizing other windows when shaking one).",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "User Interface"
+    },
+    "EnableSnapAssistFlyout": {
+      "description": "Controls Snap Layouts popup when hovering over maximize button.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\TaskManager": {
+    "Preferences": {
+      "description": "Binary blob that stores column visibility, tab positions, and view preferences for Task Manager.",
+      "type": "REG_BINARY",
+      "category": "User Interface"
+    },
+    "StartUpTab": {
+      "description": "Specifies which tab Task Manager opens on by default (e.g., Performance, Details).",
+      "type": "REG_SZ",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile": {
+    "NetworkThrottlingIndex": {
+      "description": "Controls throttling of multimedia streaming over the network (set FFFFFFFF to disable).",
+      "type": "DWORD",
+      "category": "Performance"
+    },
+    "SystemResponsiveness": {
+      "description": "Specifies how responsive Windows is to foreground tasks vs background multimedia streams.",
+      "type": "DWORD",
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+    "HwSchMode": {
+      "description": "Controls hardware-accelerated GPU scheduling (requires restart).",
+      "type": "DWORD",
+      "values": {
+        "1": "Enabled",
+        "2": "Disabled"
+      },
+      "category": "Performance"
+    },
+    "TdrLevel": {
+      "description": "Timeout Detection and Recovery level for the GPU driver.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled (default)"
+      },
+      "category": "Performance"
+    },
+    "TdrDelay": {
+      "description": "Number of seconds Windows waits before considering GPU unresponsive.",
+      "type": "DWORD",
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+    "NoLowDiskSpaceChecks": {
+      "description": "Disables low disk space warning popups.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "User Interface"
+    },
+    "NoResolveTrack": {
+      "description": "Prevents automatic correction of broken shortcuts.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "User Interface"
+    },
+    "LinkResolveIgnoreLinkInfo": {
+      "description": "Disables resolving .lnk file paths using LinkInfo data.",
+      "type": "DWORD",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions": {
+    "*": {
+      "description": "Stores registered Group Policy client-side extensions (CSEs).",
+      "type": "complex",
+      "category": "System Core"
+    }
+  }
+}
+# Legacy & Compatibility (Windows XP / 7 / 8 Era Keys)
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+    "Hidden": {
+      "description": "Determines whether hidden files and folders are visible in File Explorer.",
+      "type": "DWORD",
+      "values": { "1": "Show hidden files", "2": "Hide hidden files" },
+      "category": "User Interface"
+    },
+    "HideFileExt": {
+      "description": "Controls whether known file extensions are hidden in File Explorer.",
+      "type": "DWORD",
+      "values": { "0": "Show extensions", "1": "Hide extensions" },
+      "category": "User Interface"
+    },
+    "ShowSuperHidden": {
+      "description": "Controls visibility of protected operating system files.",
+      "type": "DWORD",
+      "values": { "0": "Hidden", "1": "Visible" },
+      "category": "User Interface"
+    },
+    "SeparateProcess": {
+      "description": "Forces each File Explorer window to run in a separate process.",
+      "type": "DWORD",
+      "values": { "0": "Single process", "1": "Separate processes" },
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+    "CachedLogonsCount": {
+      "description": "Defines the number of previous logons stored locally for offline logon.",
+      "type": "REG_SZ",
+      "category": "Security"
+    },
+    "ForceUnlockLogon": {
+      "description": "Forces Ctrl+Alt+Del authentication when unlocking the workstation.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "ReportBootOk": {
+      "description": "Determines whether Windows notifies the service control manager after boot.",
+      "type": "REG_SZ",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce": {
+    "*": {
+      "description": "Programs that run once at next startup, then delete themselves.",
+      "type": "complex",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunServices": {
+    "*": {
+      "description": "Legacy autostart services from Windows 9x and XP era. Still supported for compatibility.",
+      "type": "complex",
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management": {
+    "ClearPageFileAtShutdown": {
+      "description": "When enabled, clears the page file at system shutdown for security.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Security"
+    },
+    "DisablePagingExecutive": {
+      "description": "Prevents kernel and device drivers from being paged to disk.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "Performance"
+    },
+    "LargeSystemCache": {
+      "description": "Optimizes system memory for server (1) or workstation (0) behavior.",
+      "type": "DWORD",
+      "values": { "0": "Workstation", "1": "Server" },
+      "category": "Performance"
+    },
+    "NonPagedPoolQuota": {
+      "description": "Sets the maximum size of the non-paged memory pool.",
+      "type": "REG_DWORD",
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+    "DisableTaskMgr": {
+      "description": "Disables Task Manager access for users.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Security"
+    },
+    "DisableRegistryTools": {
+      "description": "Disables Registry Editor (regedit.exe) for users.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+    "NoControlPanel": {
+      "description": "Hides or disables Control Panel access.",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Blocked" },
+      "category": "User Interface"
+    },
+    "NoNetworkConnections": {
+      "description": "Hides Network Connections in Control Panel.",
+      "type": "DWORD",
+      "values": { "0": "Shown", "1": "Hidden" },
+      "category": "User Interface"
+    },
+    "NoDrives": {
+      "description": "Hides specified drives from File Explorer. Uses bitmask values.",
+      "type": "DWORD",
+      "category": "User Interface"
+    },
+    "NoViewOnDrive": {
+      "description": "Prevents access to the specified drives even if visible.",
+      "type": "DWORD",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore": {
+    "DisableSR": {
+      "description": "Disables the Windows System Restore feature.",
+      "type": "DWORD",
+      "values": { "0": "Enabled", "1": "Disabled" },
+      "category": "System Core"
+    },
+    "CreateFirstRunRp": {
+      "description": "Creates a restore point at system first run.",
+      "type": "DWORD",
+      "values": { "0": "Disabled", "1": "Enabled" },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall": {
+    "*": {
+      "description": "Lists installed applications and their uninstall information.",
+      "type": "complex",
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved": {
+    "*": {
+      "description": "Lists approved shell extensions (context menu handlers, icon overlays, etc.).",
+      "type": "complex",
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+    "NoFolderOptions": {
+      "description": "Hides the Folder Options menu in File Explorer.",
+      "type": "DWORD",
+      "values": { "0": "Visible", "1": "Hidden" },
+      "category": "User Interface"
+    },
+    "NoSaveSettings": {
+      "description": "Prevents saving changes to folder view settings.",
+      "type": "DWORD",
+      "values": { "0": "Allowed", "1": "Prevented" },
+      "category": "User Interface"
+    },
+    "ClassicShell": {
+      "description": "Forces File Explorer to use classic Windows 7-style shell behavior.",
+      "type": "DWORD",
+      "values": { "0": "Modern UI", "1": "Classic UI" },
+      "category": "User Interface"
     }
   }
 }
