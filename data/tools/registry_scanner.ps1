@@ -36,7 +36,7 @@ function Convert-PathToFull {
     return $prov
 }
 
-# --------- UI ---------
+# -------- UI SETUP --------
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Registry Dictionary Scanner"
 $form.Width = 1000
@@ -100,9 +100,11 @@ $form.Controls.Add($lblSummary)
 
 $btnSave.Enabled = $false
 
-# --------- THREAD SCAN ---------
+# -------- THREAD SCAN --------
 $form.Add_Shown({
-    $thread = [System.Threading.Thread]::new({
+    $threadScript = {
+        param($form, $progressBar, $labelStatus, $txtKnown, $txtUnknown, $lblSummary, $btnSave)
+
         $dict = Load-Dictionary
         $known = [System.Collections.ArrayList]@()
         $unknown = [System.Collections.ArrayList]@()
@@ -130,7 +132,6 @@ $form.Add_Shown({
                 $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
                 $valueNames = $values.PSObject.Properties | Where-Object { $_.Name -notmatch '^PS(A|P|C)' } | ForEach-Object { $_.Name }
                 foreach ($vName in $valueNames) {
-                    $val = $values.$vName
                     $fullPath = Convert-PathToFull $key.PSPath
                     $entry = Get-EntryInfo -dict $dict -path $fullPath -name $vName
                     if ($entry) {
@@ -176,7 +177,13 @@ $form.Add_Shown({
                 }
             })
         }, $known, $unknown)
-    })
+    }
+
+    $thread = New-Object System.Threading.Thread(
+        [System.Threading.ThreadStart]{
+            & $threadScript $form $progressBar $labelStatus $txtKnown $txtUnknown $lblSummary $btnSave
+        }
+    )
     $thread.IsBackground = $true
     $thread.Start()
 })
