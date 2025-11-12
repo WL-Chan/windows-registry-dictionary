@@ -80,5 +80,3 @@ Planned documentation additions:
 
 **Maintainer:** WL Chan  
 **Repository:** [Windows Registry Dictionary](https://github.com/WL-Chan/windows-registry-dictionary)
-
-End of Documentation Index
