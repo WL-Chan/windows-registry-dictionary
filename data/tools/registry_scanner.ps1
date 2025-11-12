@@ -36,7 +36,7 @@ function Convert-PathToFull {
     return $prov
 }
 
-# ----------- UI -----------
+# -------- UI SETUP --------
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Registry Dictionary Scanner"
 $form.Width = 1000
@@ -99,12 +99,16 @@ $lblSummary.AutoSize = $true
 $form.Controls.Add($lblSummary)
 
 $btnSave.Enabled = $false
-$form.Topmost = $true
 
-# ----------- THREAD SCANNER -----------
+# -------- RUNSPACE BACKGROUND SCAN --------
 $form.Add_Shown({
-    $thread = New-Object System.Threading.Thread([System.Threading.ThreadStart]{
-        $ErrorActionPreference = "SilentlyContinue"
+    $ps = [powershell]::Create()
+    $ps.Runspace = [runspacefactory]::CreateRunspace()
+    $ps.Runspace.ApartmentState = "STA"
+    $ps.Runspace.ThreadOptions = "ReuseThread"
+    $ps.Runspace.Open()
+
+    $ps.AddScript({
         $dict = Load-Dictionary
         $known = [System.Collections.ArrayList]@()
         $unknown = [System.Collections.ArrayList]@()
@@ -160,8 +164,8 @@ $form.Add_Shown({
             }, @($known, $unknown))
         } catch {}
     })
-    $thread.IsBackground = $true
-    $thread.Start()
+
+    $null = $ps.BeginInvoke()
 })
 
 # ---- Save Report ----
@@ -182,3 +186,4 @@ $btnSave.Add_Click({
 })
 
 [void]$form.ShowDialog()
+#
