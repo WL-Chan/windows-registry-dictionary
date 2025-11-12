@@ -1,3 +1,9 @@
+[![Version](https://img.shields.io/badge/version-0.1-blue.svg)](./version.json)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![Docs](https://img.shields.io/badge/docs-schema.md-lightgrey.svg)](./docs/schema.md)
+[![Contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](./docs/contribution_guide.md)
+
+
 # Windows Registry Dictionary
 
 The **Windows Registry Dictionary** is an open JSON-based reference that translates raw Windows Registry keys and values into human-readable names, descriptions, and categories.
