@@ -1,0 +1,13 @@
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+    "EnableLUA": {
+      "description": "Controls User Account Control (UAC) prompts. When 0, UAC prompts are disabled; when 1, UAC is enabled.",
+      "type": "DWORD",
+      "values": {
+        "0": "UAC Disabled",
+        "1": "UAC Enabled"
+      },
+      "category": "Security"
+    }
+  }
+}
