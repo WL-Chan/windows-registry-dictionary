@@ -1,0 +1,12 @@
+{
+  "Security": "Registry keys that affect Windows security, permissions, and access control.",
+  "Startup": "Programs and services that automatically start with Windows.",
+  "Network": "Settings related to network configuration, TCP/IP, DNS, and connectivity.",
+  "User Interface": "Visual, appearance, and personalization settings for Windows.",
+  "System Core": "Low-level configuration for Windows services, drivers, and the kernel.",
+  "Updates": "Windows Update, patching behavior, and automatic update configuration.",
+  "Performance": "Settings related to system responsiveness, timeouts, and optimization.",
+  "Privacy": "Options related to telemetry, diagnostic data collection, and user privacy controls.",
+  "Display": "Monitor, resolution, scaling, and color-related configuration.",
+  "Audio": "Registry entries controlling sound devices, volume, and driver behavior."
+}
