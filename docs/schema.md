@@ -76,4 +76,16 @@ Example:
 }
 ```
 
+---
+
+## 6. Data Types (type Field)
+| Type            | Description                                                          |
+| --------------- | -------------------------------------------------------------------- |
+| `REG_SZ`        | String value.                                                        |
+| `DWORD`         | 32-bit integer.                                                      |
+| `QWORD`         | 64-bit integer.                                                      |
+| `REG_BINARY`    | Binary data.                                                         |
+| `REG_MULTI_SZ`  | Multi-string value.                                                  |
+| `REG_EXPAND_SZ` | Expandable string with environment variables.                        |
+| `complex`       | Indicates a container key with multiple sub-values (e.g., Services). |
 
