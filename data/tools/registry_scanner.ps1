@@ -36,7 +36,7 @@ function Convert-PathToFull {
     return $prov
 }
 
-# -------- UI SETUP --------
+# ----------- UI -----------
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Registry Dictionary Scanner"
 $form.Width = 1000
@@ -99,12 +99,12 @@ $lblSummary.AutoSize = $true
 $form.Controls.Add($lblSummary)
 
 $btnSave.Enabled = $false
+$form.Topmost = $true
 
-# -------- THREAD SCAN --------
+# ----------- THREAD SCANNER -----------
 $form.Add_Shown({
-    $threadScript = {
-        param($form, $progressBar, $labelStatus, $txtKnown, $txtUnknown, $lblSummary, $btnSave)
-
+    $thread = New-Object System.Threading.Thread([System.Threading.ThreadStart]{
+        $ErrorActionPreference = "SilentlyContinue"
         $dict = Load-Dictionary
         $known = [System.Collections.ArrayList]@()
         $unknown = [System.Collections.ArrayList]@()
@@ -116,17 +116,18 @@ $form.Add_Shown({
             catch {}
         }
         $total = $allKeys.Count
+        if ($total -eq 0) { $total = 1 }
         $i = 0
 
         foreach ($key in $allKeys) {
             $i++
-            $percent = [math]::Round(($i / $total) * 100)
-
-            $form.Invoke({
-                param($p, $msg)
-                $progressBar.Value = $p
-                $labelStatus.Text = $msg
-            }, $percent, "Scanning $i / $total...")
+            $percent = [math]::Min(100, [math]::Round(($i / $total) * 100))
+            try {
+                $form.Invoke({
+                    $progressBar.Value = $args[0]
+                    $labelStatus.Text = "Scanning $($args[1]) / $($args[2])..."
+                }, @($percent, $i, $total))
+            } catch {}
 
             try {
                 $values = Get-ItemProperty -Path $key.PSPath -ErrorAction SilentlyContinue
@@ -149,43 +150,35 @@ $form.Add_Shown({
             } catch {}
         }
 
-        $form.Invoke({
-            param($known,$unknown)
-            $txtKnown.Lines = $known | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
-            $txtUnknown.Lines = $unknown | ForEach-Object { $_.Path }
-            $lblSummary.Text = "Known: $($known.Count)    Unknown: $($unknown.Count)"
-            $labelStatus.Text = "Scan complete."
-            $btnSave.Enabled = $true
-
-            $btnSave.Add_Click({
-                $dialog = New-Object System.Windows.Forms.SaveFileDialog
-                $dialog.Filter = "JSON Files (*.json)|*.json"
-                $dialog.Title = "Save Registry Scan Report"
-                $dialog.FileName = "registry_scan_report.json"
-                if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
-                    $output = @{
-                        Known = $known
-                        Unknown = $unknown
-                        Summary = @{
-                            KnownCount = $known.Count
-                            UnknownCount = $unknown.Count
-                            Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-                        }
-                    }
-                    $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
-                    [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
-                }
-            })
-        }, $known, $unknown)
-    }
-
-    $thread = New-Object System.Threading.Thread(
-        [System.Threading.ThreadStart]{
-            & $threadScript $form $progressBar $labelStatus $txtKnown $txtUnknown $lblSummary $btnSave
-        }
-    )
+        try {
+            $form.Invoke({
+                $txtKnown.Lines = $args[0] | ForEach-Object { "[$($_.Cat)] $($_.Path)`r`n    $($_.Desc)" }
+                $txtUnknown.Lines = $args[1] | ForEach-Object { $_.Path }
+                $lblSummary.Text = "Known: $($args[0].Count)    Unknown: $($args[1].Count)"
+                $labelStatus.Text = "Scan complete."
+                $btnSave.Enabled = $true
+            }, @($known, $unknown))
+        } catch {}
+    })
     $thread.IsBackground = $true
     $thread.Start()
+})
+
+# ---- Save Report ----
+$btnSave.Add_Click({
+    $dialog = New-Object System.Windows.Forms.SaveFileDialog
+    $dialog.Filter = "JSON Files (*.json)|*.json"
+    $dialog.Title = "Save Registry Scan Report"
+    $dialog.FileName = "registry_scan_report.json"
+    if ($dialog.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) {
+        $output = @{
+            Known = $txtKnown.Lines
+            Unknown = $txtUnknown.Lines
+            Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        }
+        $output | ConvertTo-Json -Depth 5 | Set-Content -Path $dialog.FileName -Encoding UTF8
+        [System.Windows.Forms.MessageBox]::Show("Report saved:`n$($dialog.FileName)","Export Complete","OK","Information")
+    }
 })
 
 [void]$form.ShowDialog()
