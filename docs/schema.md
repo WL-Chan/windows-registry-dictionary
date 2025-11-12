@@ -44,7 +44,7 @@ Each path may contain one or more registry values, with associated metadata.
 }
 ```
 
-### 4. Field Descriptions
+## 4. Field Descriptions
 | Field           | Type   | Description                                                                                      | Required |
 | --------------- | ------ | ------------------------------------------------------------------------------------------------ | -------- |
 | **description** | string | Human-readable explanation of the key or value.                                                  | Yes      |
@@ -52,7 +52,7 @@ Each path may contain one or more registry values, with associated metadata.
 | **values**      | object | Optional mapping of registry data values to readable states. Used for enumeration-type settings. | No       |
 | **category**    | string | Logical category (must match one defined in `categories.json`).                                  | Yes      |
 
-### 5. Wildcard Rules
+## 5. Wildcard Rules
 Some keys represent multiple subkeys or values.
 To support this, wildcards are used.
 | Wildcard | Meaning                                                                |
