@@ -42,3 +42,10 @@ Each path may contain one or more registry values, with associated metadata.
     }
   }
 }
+
+## 4. Field Descriptions
+Field	Type	Description	Required
+description	string	Human-readable explanation of the key or value.	Yes
+type	string	Registry data type (e.g., DWORD, REG_SZ, REG_BINARY, complex).	Yes
+values	object	Optional mapping of registry data values to readable states. Used for enumeration-type settings.	No
+category	string	Logical category (must match one defined in categories.json).	Yes
