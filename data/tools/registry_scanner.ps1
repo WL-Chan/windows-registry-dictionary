@@ -1,3 +1,9 @@
+if (![Threading.Thread]::CurrentThread.ApartmentState -ne 'STA') {
+    Write-Host "Restarting in STA mode..."
+    Start-Process pwsh -ArgumentList "-STA -File `"$PSCommandPath`"" -Wait
+    exit
+}
+
 Add-Type -AssemblyName PresentationFramework
 
 [xml]$xaml = @"
