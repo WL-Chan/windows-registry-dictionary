@@ -1,5 +1,5 @@
 # Windows Registry Dictionary
-#A Windows Registry Human Dictionary
+# A Windows Registry Human Dictionary
 This project is an open JSON-based dictionary that translates **Windows Registry keys** into human-readable names and explanations.
 
 # Purpose
