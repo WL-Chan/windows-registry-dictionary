@@ -56,3 +56,64 @@ Notes:
 
 ---
 
+## 4. Editing or Updating an Existing Entry
+
+If an entry already exists:
+1. Confirm that your changes are factual and documented.
+2. Update the description, values, or category as needed.
+3. Do not remove fields or keys unless they are confirmed obsolete.
+4. Keep the language neutral and descriptive.
+
+When updating large sections, include a brief note in your pull request summarizing what changed.
+
+---
+
+## 5. Formatting Rules
+
+- Indentation: 2 spaces per level
+- Quotation marks: Always use double quotes "
+- No trailing commas in JSON objects
+- Descriptions should be short, technical, and clear
+- Always use valid JSON (test with a JSON linter before committing)
+
+---
+
+## 6. Version Control
+When major additions or updates are made:
+1. Increment the version number in version.json by 0.1.
+   - Example: from 0.1 to 0.2
+2. Commit the version change as a separate commit if possible.
+
+Minor typo fixes or description improvements do not require a version increment.
+
+---
+
+## 7. Pull Request Checklist
+
+Before submitting a pull request:
+1. Validate JSON formatting.
+2. Confirm that all categories exist in categories.json.
+3. Ensure your addition follows the schema rules in docs/schema.md.
+4. Provide a clear PR title and summary (e.g., “Add registry entry: EnableLUA under Security category”).
+5. Avoid adding duplicate or redundant entries.
+
+---
+
+## 8. Validation Tools
+
+Recommended ways to verify your JSON:
+- Use an online JSON validator such as jsonlint.com
+- Or run a local linter if available in your editor/IDE
+- Ensure your editor saves files using UTF-8 without BOM
+
+---
+
+## 9. Quality Standards
+
+- Each description must be factually correct and technically verified.
+- Avoid speculation or undocumented Windows behavior.
+- If an entry is experimental or uncertain, include a note field:
+  ```json
+  "note": "Behavior observed in Windows 11 build 22621; requires confirmation."
+  ```
+- Keep all explanations concise (under 3 sentences preferred).
