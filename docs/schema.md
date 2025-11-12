@@ -151,6 +151,4 @@ Before committing changes:
 3. Ensure descriptions are concise and neutral.
 4. Avoid including user-specific registry keys or transient entries.
 
----
-
 
