@@ -1,0 +1,111 @@
+{
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+    "EnableLUA": {
+      "description": "Controls User Account Control (UAC). When 0, UAC prompts are disabled (not recommended); when 1, UAC is enabled.",
+      "type": "DWORD",
+      "values": {
+        "0": "UAC Disabled",
+        "1": "UAC Enabled"
+      },
+      "category": "Security"
+    },
+    "ConsentPromptBehaviorAdmin": {
+      "description": "Controls the behavior of UAC prompts for administrators.",
+      "type": "DWORD",
+      "values": {
+        "0": "Automatically deny elevation requests",
+        "1": "Prompt for credentials on the secure desktop",
+        "2": "Prompt for consent on the secure desktop",
+        "5": "Prompt for consent (default for admins)"
+      },
+      "category": "Security"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
+    "*": {
+      "description": "Programs listed here are configured to run automatically when Windows starts (system-wide). Value name = friendly name, value data = command or path.",
+      "type": "REG_SZ",
+      "values": {},
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
+    "*": {
+      "description": "Programs listed here run automatically at user logon (per-user). Value name = friendly name, value data = command or path.",
+      "type": "REG_SZ",
+      "values": {},
+      "category": "Startup"
+    }
+  },
+
+  "HKEY_CURRENT_USER\\Control Panel\\Desktop": {
+    "Wallpaper": {
+      "description": "Path to the current desktop wallpaper image file.",
+      "type": "REG_SZ",
+      "values": {},
+      "category": "User Interface"
+    },
+    "ScreenSaveActive": {
+      "description": "Indicates whether the screen saver is active for the current user.",
+      "type": "REG_SZ",
+      "values": {
+        "0": "Screen saver disabled",
+        "1": "Screen saver enabled"
+      },
+      "category": "User Interface"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services": {
+    "*": {
+      "description": "Each subkey represents a system service or driver. Important values include 'Start' (when the service starts) and 'ImagePath' (binary path).",
+      "type": "complex",
+      "values": {
+        "Start": "Service start type (0: Boot, 1: System, 2: Automatic, 3: Manual, 4: Disabled)",
+        "ImagePath": "Path to service executable or driver"
+      },
+      "category": "System Core"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters": {
+    "EnableDeadGWDetect": {
+      "description": "Determines whether Windows will detect and switch to alternate default gateways when the current gateway is unreachable.",
+      "type": "DWORD",
+      "values": {
+        "0": "Disabled",
+        "1": "Enabled"
+      },
+      "category": "Network"
+    },
+    "Hostname": {
+      "description": "Computer network name (hostname) used for certain network operations.",
+      "type": "REG_SZ",
+      "values": {},
+      "category": "Network"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control": {
+    "WaitToKillServiceTimeout": {
+      "description": "Time in milliseconds Windows waits for services to stop before forcing termination during shutdown/restart.",
+      "type": "REG_SZ",
+      "values": {},
+      "category": "Performance"
+    }
+  },
+
+  "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU": {
+    "NoAutoUpdate": {
+      "description": "When set, disables automatic Windows Updates according to policy. (Managed by Group Policy in many environments.)",
+      "type": "DWORD",
+      "values": {
+        "0": "Automatic updates allowed",
+        "1": "Automatic updates disabled"
+      },
+      "category": "Updates"
+    }
+  }
+}
